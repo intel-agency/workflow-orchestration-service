@@ -1,12 +1,12 @@
 {
-  "name": "workflow-orchestration-queue-tango48",
+  "name": "workflow-orchestration-prebuild-devcontainer",
   "image": "ghcr.io/intel-agency/workflow-orchestration-prebuild/devcontainer:main-latest",
   "containerEnv": {
     "DOTNET_ROOT": "/usr/share/dotnet"
   },
   "remoteEnv": {
-    "GITHUB_TOKEN": "${localEnv:GH_ORCHESTRATION_AGENT_TOKEN}",
-    "GITHUB_PERSONAL_ACCESS_TOKEN": "${localEnv:GH_ORCHESTRATION_AGENT_TOKEN}",
+    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "${localEnv:GITHUB_TOKEN}",
     "GH_ORCHESTRATION_AGENT_TOKEN": "${localEnv:GH_ORCHESTRATION_AGENT_TOKEN}",
     "ZHIPU_API_KEY": "${localEnv:ZHIPU_API_KEY}",
     "KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY": "${localEnv:KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY}",
