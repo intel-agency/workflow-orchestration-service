@@ -1,0 +1,9 @@
+{
+  "name": "workflow-orchestration-prebuild/devcontainer",
+  "image": "ghcr.io/intel-agency/workflow-orchestration-prebuild:main-latest",
+  "containerEnv": {
+    "DOTNET_ROOT": "/usr/share/dotnet"
+  },
+  "forwardPorts": [4096],
+  "remoteUser": "vscode"
+}
