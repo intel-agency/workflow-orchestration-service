@@ -1,0 +1,58 @@
+# docker-compose.yml — OS-APOW Orchestration Service (local development)
+#
+# Runs the orchestration server and client as networked containers.
+# Usage: docker compose up
+#
+# Required env vars (set in .env or shell):
+#   ZHIPU_API_KEY, GH_ORCHESTRATION_AGENT_TOKEN, GITHUB_TOKEN,
+#   GITHUB_ORG, GITHUB_REPO, WEBHOOK_SECRET
+
+services:
+  orchestration-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4096:4096"
+    environment:
+      - ZHIPU_API_KEY
+      - KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY
+      - OPENAI_API_KEY
+      - GEMINI_API_KEY
+      - GH_ORCHESTRATION_AGENT_TOKEN
+    volumes:
+      - server-memory:/opt/orchestration/.memory
+    networks:
+      - orchestration-net
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:4096/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  orchestration-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENCODE_SERVER_URL=http://orchestration-server:4096
+      - GITHUB_TOKEN
+      - GITHUB_ORG
+      - GITHUB_REPO
+      - WEBHOOK_SECRET
+      - SENTINEL_BOT_LOGIN
+    depends_on:
+      orchestration-server:
+        condition: service_healthy
+    networks:
+      - orchestration-net
+
+volumes:
+  server-memory:
+
+networks:
+  orchestration-net:
+    driver: bridge
