@@ -18,6 +18,8 @@ temperature: 0.2
 permission:
   bash: deny
   task: deny
+  edit: deny
+  websearch: deny
 ---
 
 # Agent Instructions Expert

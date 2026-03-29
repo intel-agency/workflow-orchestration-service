@@ -16,6 +16,9 @@ temperature: 0.3
 #   webfetch: true
 permission:
   bash: deny
+  edit: deny
+  lsp: deny
+  codesearch: deny
 ---
 
 You are a UX/UI designer focused on user experience and interface design.

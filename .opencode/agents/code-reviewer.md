@@ -17,6 +17,7 @@ temperature: 0.1
 #   webfetch: true
 permission:
   edit: deny
+  websearch: deny
 ---
 
 You are a code reviewer focused on ensuring quality, security, and maintainability standards.

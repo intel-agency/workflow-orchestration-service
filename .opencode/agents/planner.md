@@ -16,7 +16,7 @@ temperature: 0.1
 #   todoread: true
 #   webfetch: true
 permission:
-  bash: deny
+  bash: deny  
 ---
 
 You are a planner creating executable roadmaps and work breakdowns.

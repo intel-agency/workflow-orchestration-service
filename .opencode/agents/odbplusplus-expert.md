@@ -17,6 +17,9 @@ temperature: 0.2
 #   webfetch: true
 permission:
   bash: deny
+  task: deny
+  edit: deny
+  websearch: deny
 ---
 
 You are a researcher focused on gathering context and producing actionable briefs.
