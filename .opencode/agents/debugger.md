@@ -2,18 +2,18 @@
 description: Reproduces issues, writes minimal failing tests, proposes and validates fixes
 mode: subagent
 temperature: 0.2
-tools:
-  read: true
-  write: true
-  edit: true
-  list: true
-  bash: true
-  grep: true
-  glob: true
-  task: true
-  todowrite: true
-  todoread: true
-  webfetch: true
+# tools: (deprecated — replaced by permission; all default to allow)
+#   read: true
+#   write: true
+#   edit: true
+#   list: true
+#   bash: true
+#   grep: true
+#   glob: true
+#   task: true
+#   todowrite: true
+#   todoread: true
+#   webfetch: true
 ---
 
 You are a debugger specializing in root cause analysis and issue reproduction.

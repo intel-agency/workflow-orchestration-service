@@ -3,18 +3,18 @@ description: Expert on ODB++ spec and OdbDesign codebase; produces distilled bri
 mode: subagent
 model: zai-coding-plan/glm-5
 temperature: 0.2
-tools:
-  read: true
-  write: true
-  edit: true
-  list: true
-  bash: false
-  grep: true
-  glob: true
-  task: true
-  todowrite: true
-  todoread: true
-  webfetch: true
+# tools: (deprecated — replaced by permission)
+#   read: true
+#   write: true
+#   edit: true
+#   list: true
+#   bash: false
+#   grep: true
+#   glob: true
+#   task: true
+#   todowrite: true
+#   todoread: true
+#   webfetch: true
 permission:
   bash: deny
 ---

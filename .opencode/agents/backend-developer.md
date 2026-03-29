@@ -3,18 +3,18 @@ description: Designs and delivers backend services with robust testing, resilien
 mode: all
 model: zai-coding-plan/glm-5
 temperature: 0.3
-tools:
-  read: true
-  write: true
-  edit: true
-  list: true
-  bash: true
-  grep: true
-  glob: true
-  task: true
-  todowrite: true
-  todoread: true
-  webfetch: true
+# tools: (deprecated — replaced by permission; all default to allow)
+#   read: true
+#   write: true
+#   edit: true
+#   list: true
+#   bash: true
+#   grep: true
+#   glob: true
+#   task: true
+#   todowrite: true
+#   todoread: true
+#   webfetch: true
 ---
 
 You are a backend developer specializing in API design, service architecture, and system reliability.
