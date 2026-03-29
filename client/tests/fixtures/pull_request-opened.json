@@ -1,0 +1,63 @@
+{
+  "action": "opened",
+  "number": 15,
+  "pull_request": {
+    "id": 987654321,
+    "node_id": "MDExOlB1bGxSZXF1ZXN0OTg3NjU0MzIx",
+    "number": 15,
+    "title": "Test PR from Fixture",
+    "body": "This is a test pull request loaded from a fixture file.",
+    "state": "open",
+    "draft": false,
+    "merged": false,
+    "user": {
+      "login": "fixture-user",
+      "id": 123456,
+      "node_id": "MDQ6VXNlcjEyMzQ1Ng==",
+      "avatar_url": "https://github.com/images/error/fixture-user.gif",
+      "html_url": "https://github.com/fixture-user",
+      "type": "User"
+    },
+    "labels": [],
+    "assignees": [],
+    "requested_reviewers": [],
+    "milestone": null,
+    "base": {
+      "ref": "main",
+      "sha": "abc123def456"
+    },
+    "head": {
+      "ref": "feature/test-branch",
+      "sha": "def456abc123"
+    },
+    "created_at": "2024-01-15T11:00:00Z",
+    "updated_at": "2024-01-15T11:00:00Z",
+    "merged_at": null,
+    "html_url": "https://github.com/fixture-owner/fixture-repo/pull/15"
+  },
+  "repository": {
+    "id": 987654321,
+    "node_id": "MDEwOlJlcG9zaXRvcnk5ODc2NTQzMjE=",
+    "name": "fixture-repo",
+    "full_name": "fixture-owner/fixture-repo",
+    "private": false,
+    "owner": {
+      "login": "fixture-owner",
+      "id": 654321,
+      "node_id": "MDQ6VXNlcjY1NDMyMQ==",
+      "avatar_url": "https://github.com/images/error/fixture-owner.gif",
+      "html_url": "https://github.com/fixture-owner",
+      "type": "User"
+    },
+    "html_url": "https://github.com/fixture-owner/fixture-repo",
+    "default_branch": "main"
+  },
+  "sender": {
+    "login": "fixture-user",
+    "id": 123456,
+    "node_id": "MDQ6VXNlcjEyMzQ1Ng==",
+    "avatar_url": "https://github.com/images/error/fixture-user.gif",
+    "html_url": "https://github.com/fixture-user",
+    "type": "User"
+  }
+}
