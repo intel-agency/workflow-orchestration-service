@@ -2,23 +2,20 @@
 description: Wireframes, flows, accessibility, and design QA
 mode: subagent
 temperature: 0.3
-# tools: (deprecated — replaced by permission)
-#   read: true
-#   write: true
-#   edit: true
-#   list: true
-#   bash: false
-#   grep: true
-#   glob: true
-#   task: true
-#   todowrite: true
-#   todoread: true
-#   webfetch: true
+tools:
+  read: true
+  write: true
+  edit: true
+  list: true
+  bash: false
+  grep: true
+  glob: true
+  task: true
+  todowrite: true
+  todoread: true
+  webfetch: true
 permission:
   bash: deny
-  edit: deny
-  lsp: deny
-  codesearch: deny
 ---
 
 You are a UX/UI designer focused on user experience and interface design.

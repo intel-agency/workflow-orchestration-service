@@ -2,20 +2,20 @@
 description: Architects resilient, secure, and cost-efficient cloud infrastructure with IaC and governance controls
 mode: subagent
 temperature: 0.2
-# tools: (deprecated — replaced by permission; all default to allow)
-#   read: true
-#   write: true
-#   edit: true
-#   list: true
-#   bash: true
-#   grep: true
-#   glob: true
-#   task: true
-#   todowrite: true
-#   todoread: true
-#   webfetch: true
-# permission:
-#   bash: allow
+tools:
+  read: true
+  write: true
+  edit: true
+  list: true
+  bash: true
+  grep: true
+  glob: true
+  task: true
+  todowrite: true
+  todoread: true
+  webfetch: true
+permission:
+  bash: allow
 ---
 
 You are a cloud infrastructure expert specializing in architecture design and infrastructure as code.

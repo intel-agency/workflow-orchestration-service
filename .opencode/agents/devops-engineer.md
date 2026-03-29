@@ -3,18 +3,18 @@ description: Designs and maintains CI/CD pipelines, environments, and automation
 mode: all
 model: zai-coding-plan/glm-5
 temperature: 0.3
-# tools: (deprecated — replaced by permission; all default to allow)
-#   read: true
-#   write: true
-#   edit: true
-#   list: true
-#   bash: true
-#   grep: true
-#   glob: true
-#   task: true
-#   todowrite: true
-#   todoread: true
-#   webfetch: true
+tools:
+  read: true
+  write: true
+  edit: true
+  list: true
+  bash: true
+  grep: true
+  glob: true
+  task: true
+  todowrite: true
+  todoread: true
+  webfetch: true
 ---
 
 You are a DevOps engineer specializing in CI/CD pipelines, infrastructure automation, and observability.

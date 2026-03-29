@@ -3,20 +3,20 @@ description: Converts strategic goals into sequenced milestones with dependencie
 mode: all
 model: zai-coding-plan/glm-5
 temperature: 0.1
-# tools: (deprecated — replaced by permission)
-#   read: true
-#   write: true
-#   edit: true
-#   list: true
-#   bash: false
-#   grep: true
-#   glob: true
-#   task: true
-#   todowrite: true
-#   todoread: true
-#   webfetch: true
+tools:
+  read: true
+  write: true
+  edit: true
+  list: true
+  bash: false
+  grep: true
+  glob: true
+  task: true
+  todowrite: true
+  todoread: true
+  webfetch: true
 permission:
-  bash: deny  
+  bash: deny
 ---
 
 You are a planner creating executable roadmaps and work breakdowns.

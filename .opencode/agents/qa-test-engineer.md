@@ -3,18 +3,18 @@ description: Defines test strategies, executes validation suites, and enforces q
 mode: subagent
 model: zai-coding-plan/glm-5
 temperature: 0.2
-# tools: (deprecated — replaced by permission; all default to allow)
-#   read: true
-#   write: true
-#   edit: true
-#   list: true
-#   bash: true
-#   grep: true
-#   glob: true
-#   task: true
-#   todowrite: true
-#   todoread: true
-#   webfetch: true
+tools:
+  read: true
+  write: true
+  edit: true
+  list: true
+  bash: true
+  grep: true
+  glob: true
+  task: true
+  todowrite: true
+  todoread: true
+  webfetch: true
 ---
 
 You are a QA test engineer responsible for ensuring product quality through comprehensive testing.

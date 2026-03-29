@@ -3,21 +3,21 @@ description: Provides rigorous code reviews covering correctness, security, perf
 mode: subagent
 model: zai-coding-plan/glm-5
 temperature: 0.1
-# tools: (deprecated — replaced by permission)
-#   read: true
-#   write: false
-#   edit: false
-#   list: true
-#   bash: true
-#   grep: true
-#   glob: true
-#   task: true
-#   todowrite: true
-#   todoread: true
-#   webfetch: true
+tools:
+  read: true
+  write: false
+  edit: false
+  list: true
+  bash: true
+  grep: true
+  glob: true
+  task: true
+  todowrite: true
+  todoread: true
+  webfetch: true
 permission:
   edit: deny
-  websearch: deny
+  bash: allow
 ---
 
 You are a code reviewer focused on ensuring quality, security, and maintainability standards.
