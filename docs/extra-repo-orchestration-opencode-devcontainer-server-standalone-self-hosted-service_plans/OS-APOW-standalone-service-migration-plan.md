@@ -781,7 +781,7 @@ gh issue create --title "[Test] Sentinel dispatch test" \
 OPENCODE_SERVER_URL=http://localhost:4096 \
 GITHUB_TOKEN="$GH_ORCHESTRATION_AGENT_TOKEN" \
 GITHUB_ORG="intel-agency" \
-GITHUB_REPO="workflow-orchestration-queue-tango48" \
+GITHUB_REPO="workflow-orchestration-service" \
 python client/src/sentinel.py
 ```
 

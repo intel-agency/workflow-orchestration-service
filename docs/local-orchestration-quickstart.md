@@ -26,8 +26,8 @@ npm install -g @devcontainers/cli
 ### 2a. Clone the repo (if you haven't already)
 
 ```bash
-git clone https://github.com/intel-agency/workflow-orchestration-queue-tango48.git
-cd workflow-orchestration-queue-tango48
+git clone https://github.com/intel-agency/workflow-orchestration-service.git
+cd workflow-orchestration-service
 ```
 
 ### 2b. Configure environment variables

@@ -24,7 +24,7 @@ Success for workflow-orchestration-queue is defined as "Zero-Touch Construction"
 ### **User Stories**
 
 * **Story 1: Template Cloning & Plan Seeding**  
-  * **As a** Developer, **I want** to manually clone the workflow-orchestration-queue-tango48 and seed it with these plan documents in the /docs directory, **so that** the AI agents have the necessary context to start building the orchestrator.  
+  * **As a** Developer, **I want** to manually clone the workflow-orchestration-service and seed it with these plan documents in the /docs directory, **so that** the AI agents have the necessary context to start building the orchestrator.  
   * **Acceptance Criteria:**  
     * Repository cloned and initialized.  
     * /docs directory contains architecture\_guide\_v2.md and development\_plan\_v2.md.  
@@ -64,7 +64,7 @@ Success for workflow-orchestration-queue is defined as "Zero-Touch Construction"
     * Create `httpx.AsyncClient` once in `GitHubQueue.__init__()` and reuse across all API calls for connection pooling. Add an `async close()` wired to shutdown.
 * **Story 3: Shell-Bridge Dispatcher**  
   * **As an** Orchestrator, **I want** to invoke ./scripts/devcontainer-opencode.sh prompt when a task is found, **so that** the agentic environment begins technical work.  
-  * **Rationale:** By piping the task into the existing shell bridge, we inherit all the SSH-agent forwarding, volume mounts, and Docker network configurations defined in the workflow-orchestration-queue-tango48.  
+  * **Rationale:** By piping the task into the existing shell bridge, we inherit all the SSH-agent forwarding, volume mounts, and Docker network configurations defined in the workflow-orchestration-service.  
   * **Acceptance Criteria:**  
     * The Sentinel ensures the environment is "up" via ./scripts/devcontainer-opencode.sh up before sending the prompt.  
     * Subprocess output (stdout/stderr) is streamed to local JSON-structured log files (e.g., worker\_run\_ID.jsonl) to ensure durability and machine-readability during long-running tasks.  
@@ -156,7 +156,7 @@ Success for workflow-orchestration-queue is defined as "Zero-Touch Construction"
 
 ## **6\. Infrastructure & Self-Bootstrapping Lifecycle**
 
-1. **Stage 0 (Seeding):** The developer manually clones the workflow-orchestration-queue-tango48. This plan is added to /docs.  
+1. **Stage 0 (Seeding):** The developer manually clones the workflow-orchestration-service. This plan is added to /docs.  
 2. **Stage 1 (Manual Launch):** Developer runs ./scripts/devcontainer-opencode.sh up to initialize the worker environment.  
 3. **Stage 2 (Project Setup):** Developer runs the orchestrate-project-setup workflow. The agent indexes the repo and configures the notifier and sentinel skeletons generated in the plan.  
 4. **Stage 3 (Handover):** The developer starts the sentinel.py service on the host. From this point, the developer interacts *only* via GitHub issues. The AI builds its own remaining features (Phase 2 and 3\) by picking up its own task tickets.

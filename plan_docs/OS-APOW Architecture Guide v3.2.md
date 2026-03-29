@@ -4,7 +4,7 @@
 
 workflow-orchestration-queue represents a paradigm shift from **Interactive AI Coding** to **Headless Agentic Orchestration**. Traditional AI developer tools require a human-in-the-loop to navigate files, provide context, and trigger executions. workflow-orchestration-queue replaces this manual overhead with a persistent, event-driven infrastructure. It transforms standard project management artifacts—specifically GitHub Issues—into "Execution Orders" that are autonomously fulfilled by specialized AI agents. This system moves the agent from a passive co-pilot role to a background production service capable of multi-step, specification-driven task fulfillment without human intervention.
 
-The system is designed to be **Self-Bootstrapping**. The initial deployment is seeded from a clone of the workflow-orchestration-queue-tango48, which provides the foundational Docker/DevContainer configs and the devcontainer-opencode.sh bridge. Once the "Sentinel" is active, the system uses its own orchestration capabilities (via the project-setup workflow) to refine its components, effectively allowing the AI to "build its own house" while residing within it. This details the transition from a manual seed to an autonomous engine by using its own orchestration logic to configure its internal environment and indices.
+The system is designed to be **Self-Bootstrapping**. The initial deployment is seeded from a clone of the workflow-orchestration-service, which provides the foundational Docker/DevContainer configs and the devcontainer-opencode.sh bridge. Once the "Sentinel" is active, the system uses its own orchestration capabilities (via the project-setup workflow) to refine its components, effectively allowing the AI to "build its own house" while residing within it. This details the transition from a manual seed to an autonomous engine by using its own orchestration logic to configure its internal environment and indices.
 
 ## **2\. System Level Diagram & Component Overview**
 
@@ -49,7 +49,7 @@ The system is designed to be **Self-Bootstrapping**. The initial deployment is s
 ### **D. Opencode Worker (The "Hands")**
 
 * **Technology Stack:** opencode-server CLI, LLM Core (GLM-5 or Claude 3.5 Sonnet).  
-* **Environment:** A high-fidelity DevContainer built from the workflow-orchestration-queue-tango48.  
+* **Environment:** A high-fidelity DevContainer built from the workflow-orchestration-service.  
 * **Worker Capabilities:**  
   * **Contextual Awareness:** Accesses the local project structure and uses ./scripts/update-remote-indices.ps1 to maintain a vector-indexed view of the codebase. This emphasizes that the agent remains context-aware by running the indexing script as part of its setup.  
   * **Instructional Logic:** Reads and executes the .md workflow modules stored in /local\_ai\_instruction\_modules/. This allows the Orchestrator to "upgrade" the agent's logic simply by committing new markdown files to the repository. This "Logic-as-Markdown" principle highlights system flexibility, allowing workflows to be updated without changing Python code.  
@@ -96,7 +96,7 @@ The system is designed to be **Self-Bootstrapping**. The initial deployment is s
 
 workflow-orchestration-queue is built to be an iterative, evolving system.
 
-1. **Bootstrap:** The developer manually clones the workflow-orchestration-queue-tango48.  
+1. **Bootstrap:** The developer manually clones the workflow-orchestration-service.  
 2. **Seed:** The developer adds these plan docs to the repo and runs the create-repo-from-plan-docs script.  
 3. **Init:** The developer runs devcontainer-opencode.sh up for the first time.  
 4. **Orchestrate:** The developer uses the orchestrate-dynamic-workflow command with the project-setup assignment to allow the agent to configure its own environment variables and index the codebase. This phase transitions the system from human-managed setup to agent-managed environment configuration.  

@@ -15,6 +15,6 @@
 		],
 		"python.analysis.typeCheckingMode": "off",
 		"markdown.validate.enabled": true,
-		"powershell.cwd": "workflow-orchestration-queue-tango48"
+		"powershell.cwd": "workflow-orchestration-service"
 	}
 }

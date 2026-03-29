@@ -220,7 +220,7 @@ These change more frequently (agent definitions, prompt tuning) and are overlaid
 
 ### Phase 7: Update Template Creation Scripts
 
-21. **Update `create-repo-with-plan-docs.ps1`** in `workflow-launch2` — verify placeholder replacement still works. The consumer `devcontainer.json` image URL references `workflow-orchestration-prebuild` (not `workflow-orchestration-queue-tango48`), so it should be unaffected, but confirm.
+21. **Update `create-repo-with-plan-docs.ps1`** in `workflow-launch2` — verify placeholder replacement still works. The consumer `devcontainer.json` image URL references `workflow-orchestration-prebuild` (not `workflow-orchestration-service`), so it should be unaffected, but confirm.
 22. **Update placeholder list** — if any new files (e.g., `AGENTS.local.md`) contain template placeholders, ensure the creation script replaces them.
 
 ### Phase 8: Validate End-to-End
@@ -273,7 +273,7 @@ The known issue with `devcontainer exec` killing `nohup` background processes (r
 
 ### Template Placeholder Replacement
 
-The `create-repo-with-plan-docs.ps1` script replaces `workflow-orchestration-queue-tango48` → new repo name and `intel-agency` → new owner in file contents. After the migration:
+The `create-repo-with-plan-docs.ps1` script replaces `workflow-orchestration-service` → new repo name and `intel-agency` → new owner in file contents. After the migration:
 
 - The consumer `devcontainer.json` references `workflow-orchestration-prebuild` (not the template name) — should be unaffected
 - The new `AGENTS.local.md` will contain template placeholders — must be included in the replacement scope

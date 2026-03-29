@@ -17,7 +17,7 @@ scope: repository
 
   <template_usage>
     <summary>
-      This repository is a **GitHub template repo** (`intel-agency/workflow-orchestration-queue-tango48`).
+      This repository is a **GitHub template repo** (`intel-agency/workflow-orchestration-service`).
       New project repositories are created from it using automation scripts in the
       `nam20485/workflow-launch2` repo. The scripts clone this template, seed plan docs,
       replace template placeholders, and push — producing a ready-to-go AI-orchestrated repo.
@@ -30,19 +30,19 @@ scope: repository
     <creation_workflow>
       <step>1. Run `./scripts/create-repo-from-slug.ps1 -Slug &lt;project-slug&gt; -Yes` from the `workflow-launch2` repo.</step>
       <step>2. That delegates to `./scripts/create-repo-with-plan-docs.ps1` which:
-        - Creates a new GitHub repo from this template via `gh repo create --template intel-agency/workflow-orchestration-queue-tango48`
+        - Creates a new GitHub repo from this template via `gh repo create --template intel-agency/workflow-orchestration-service`
         - Generates a random suffix for the repo name (e.g., `project-slug-bravo84`)
         - Creates repo secrets (`ZHIPU_API_KEY`, `KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY`, `GH_ORCHESTRATION_AGENT_TOKEN`)
         - Clones the new repo locally
         - Copies plan docs from `./plan_docs/&lt;slug&gt;/` into the clone's `plan_docs/` directory
-        - Replaces all template placeholders (`workflow-orchestration-queue-tango48` → new repo name, `intel-agency` → new owner)
+        - Replaces all template placeholders (`workflow-orchestration-service` → new repo name, `intel-agency` → new owner)
         - Commits and pushes the seeded repo
       </step>
       <step>3. On push, the clone's `validate` workflow runs CI (lint, scan, tests). The prebuilt devcontainer image is sourced from the external `intel-agency/workflow-orchestration-prebuild` repo — no `publish-docker` or `prebuild-devcontainer` workflows exist in this template repo.</step>
     </creation_workflow>
 
     <template_design_constraints>
-      <rule>Template placeholders (`workflow-orchestration-queue-tango48`, `intel-agency`) in file contents and paths are replaced by the creation script. Keep them consistent.</rule>
+      <rule>Template placeholders (`workflow-orchestration-service`, `intel-agency`) in file contents and paths are replaced by the creation script. Keep them consistent.</rule>
       <rule>The `plan_docs/` directory contains external-generated documents seeded at clone time. Exclude it from strict linting (markdown lint, etc.).</rule>
       <rule>The consumer `.devcontainer/devcontainer.json` references the prebuilt GHCR image from `intel-agency/workflow-orchestration-prebuild`. The Dockerfile and prebuild pipeline live in that external repo, not here.</rule>
     </template_design_constraints>
@@ -162,6 +162,7 @@ scope: repository
     <rule>`.opencode/` is checked out by `actions/checkout`; do not COPY it in the Dockerfile.</rule>
     <rule>The Dockerfile and prebuild pipeline live in the external `intel-agency/workflow-orchestration-prebuild` repo. Consumer devcontainer uses `"image:"` pointing to `ghcr.io/intel-agency/workflow-orchestration-prebuild/devcontainer:main-latest` — no local build in this repo.</rule>
     <rule>Repository labels are defined in `.github/.labels.json`. Use `scripts/import-labels.ps1` to sync them to a repo instance. When adding new labels, add them to this file — it is the single source of truth for the label set.</rule>
+    <rule>Implementation approval protocol: before implementing any non-trivial change, verify that explicit approval was given for that specific item AND that no significant state or circumstances have changed since approval was given. If approval was never given, or was invalidated by changed circumstances, stop and ask before acting. When in doubt — ask, don't act.</rule>
   </coding_conventions>
 
   <!-- ═══════════════════════════════════════════════════════════════════
