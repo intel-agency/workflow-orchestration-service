@@ -159,10 +159,10 @@ jobs:
           # The workspace is bind-mounted, so .memory/ is visible inside the container.
           # Ensure the directory exists even if the cache was empty (first run).
           mkdir -p .memory
-          if [ -f .memory/memory.jsonl ]; then
-            echo "Restored knowledge graph: $(wc -l < .memory/memory.jsonl) entries, $(wc -c < .memory/memory.jsonl) bytes"
+          if [ -f .memory/memory.db ]; then
+            echo "Restored memory database: $(stat -c%s .memory/memory.db) bytes"
           else
-            echo "No cached knowledge graph found — starting fresh"
+            echo "No cached memory database found — starting fresh"
           fi
 
       - name: Dump assembled prompt
