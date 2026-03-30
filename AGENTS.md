@@ -61,7 +61,7 @@ scope: repository
     <item>Google Gemini models (`gemini-3.1-pro-preview`, `gemini-3.1-flash-lite-preview`, etc.) via `GEMINI_API_KEY`</item>
     <item>GitHub Actions — workflow trigger and runner; prebuilt devcontainer from `intel-agency/workflow-orchestration-prebuild`</item>
     <item>.NET SDK 10 + Aspire + Avalonia templates, Bun, uv (all in devcontainer, sourced from external prebuild image)</item>
-    <item>MCP servers (enabled): `@modelcontextprotocol/server-sequential-thinking`, `@modelcontextprotocol/server-memory`</item>
+    <item>MCP servers (enabled): `@modelcontextprotocol/server-sequential-thinking`, `mcp-memory-service` (SQLite-vec persistent memory via uvx)</item>
     <item>MCP servers (disabled): `@modelcontextprotocol/server-github`, `https://mcp.grep.app`</item>
   </tech_stack>
 
@@ -194,22 +194,18 @@ scope: repository
       <violation>Skipping sequential thinking on a non-trivial task is a protocol violation. If an agent completes a complex task without invoking sequential_thinking, the work should be reviewed for quality issues.</violation>
     </protocol>
 
-    <protocol id="knowledge_graph_memory" enforcement="MANDATORY">
-      <title>Knowledge Graph Memory — ALWAYS USE</title>
+    <protocol id="persistent_memory" enforcement="MANDATORY">
+      <title>Persistent Memory — ALWAYS USE</title>
       <tools>
-        <tool>create_entities</tool>
-        <tool>create_relations</tool>
-        <tool>add_observations</tool>
-        <tool>delete_entities</tool>
-        <tool>delete_observations</tool>
-        <tool>delete_relations</tool>
-        <tool>read_graph</tool>
-        <tool>search_nodes</tool>
-        <tool>open_nodes</tool>
+        <tool>store_memory</tool>
+        <tool>retrieve_memory</tool>
+        <tool>search_by_tag</tool>
+        <tool>delete_memory</tool>
+        <tool>check_database_health</tool>
       </tools>
       <required_usage_points>
-        <point>At task START: Call `read_graph` or `search_nodes` to retrieve existing context about the project, user preferences, prior decisions, and known patterns BEFORE planning or acting.</point>
-        <point>After SIGNIFICANT WORK: Call `create_entities`, `add_observations`, or `create_relations` to persist important findings, decisions, patterns discovered, and context for future tasks.</point>
+        <point>At task START: Call `retrieve_memory` or `search_by_tag` to retrieve existing context about the project, user preferences, prior decisions, and known patterns BEFORE planning or acting.</point>
+        <point>After SIGNIFICANT WORK: Call `store_memory` to persist important findings, decisions, patterns discovered, and context for future tasks.</point>
         <point>After COMPLETING a task: Store the outcome, any lessons learned, and follow-up items in the knowledge graph.</point>
         <point>When STARTING a new workflow or assignment: Search for prior related work, decisions, and context.</point>
       </required_usage_points>
@@ -254,18 +250,18 @@ scope: repository
     <agent_checklist>
       <!-- Agents: verify you have completed these items on every non-trivial task -->
       <item>☐ Called sequential_thinking at task start to plan approach</item>
-      <item>☐ Called read_graph / search_nodes to retrieve prior context</item>
+      <item>☐ Called retrieve_memory / search_by_tag to retrieve prior context</item>
       <item>☐ Used sequential_thinking at key decision points during work</item>
       <item>☐ Ran validation (./scripts/validate.ps1 -All) before commit/push</item>
       <item>☐ Fixed all validation failures and re-verified clean</item>
-      <item>☐ Persisted important findings to knowledge graph memory</item>
+      <item>☐ Persisted important findings to persistent memory</item>
       <item>☐ Monitored CI after push and confirmed green</item>
     </agent_checklist>
   </mandatory_tool_protocols>
 
   <agent_specific_guardrails>
     <rule>The Orchestrator agent delegates to specialists via the `task` tool — never writes code directly.</rule>
-    <rule>The Orchestrator MUST invoke `sequential_thinking` before planning any delegation and `read_graph` before every new task to load prior project context.</rule>
+    <rule>The Orchestrator MUST invoke `sequential_thinking` before planning any delegation and `retrieve_memory` before every new task to load prior project context.</rule>
     <rule>ALL agents MUST follow the mandatory_tool_protocols defined above — sequential thinking, memory, and change validation are not optional.</rule>
     <rule>Prompt assembly pipeline:
       1. Read template from `.github/workflows/prompts/orchestrator-agent-prompt.md`.
@@ -352,12 +348,12 @@ scope: repository
     </instruction>
     <instruction id="memory_default_usage" enforcement="MANDATORY">
       <applyTo>*</applyTo>
-      <title>Knowledge Graph Memory — MANDATORY for all non-trivial tasks</title>
-      <tools><tool>create_entities</tool><tool>create_relations</tool><tool>add_observations</tool><tool>delete_entities</tool><tool>delete_observations</tool><tool>delete_relations</tool><tool>read_graph</tool><tool>search_nodes</tool><tool>open_nodes</tool></tools>
+      <title>Persistent Memory — MANDATORY for all non-trivial tasks</title>
+      <tools><tool>store_memory</tool><tool>retrieve_memory</tool><tool>search_by_tag</tool><tool>delete_memory</tool><tool>check_database_health</tool></tools>
       <guidance>
         **MUST USE** for all non-trivial requests. This is a mandatory protocol, not a suggestion.
-        See `mandatory_tool_protocols.knowledge_graph_memory` for full requirements.
-        Invoke at: task start (read_graph/search_nodes), after significant work (create_entities/add_observations),
+        See `mandatory_tool_protocols.persistent_memory` for full requirements.
+        Invoke at: task start (retrieve_memory/search_by_tag), after significant work (store_memory),
         and after task completion (persist outcomes and lessons learned).
         Skipping memory operations is a protocol violation.
       </guidance>

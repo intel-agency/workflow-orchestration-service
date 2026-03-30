@@ -49,12 +49,12 @@ Build and evolve backend APIs, services, and infrastructure integrations that me
 These protocols apply to EVERY non-trivial task. See AGENTS.md `mandatory_tool_protocols` for full details.
 
 ### Required at Task Start
-1. Call `read_graph` or `search_nodes` to load prior project context from memory
+1. Call `retrieve_memory` or `search_by_tag` to load prior project context from memory
 2. Call `sequential_thinking` to analyze the task, plan approach, and identify risks
 
 ### Required During Work
 - Use `sequential_thinking` at key decision points and when debugging
-- Persist important findings via `create_entities` / `add_observations`
+- Persist important findings via `store_memory`
 
 ### Required Before Commit/Push
 - Run `./scripts/validate.ps1 -All` and fix ALL failures before committing
