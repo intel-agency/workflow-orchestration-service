@@ -199,17 +199,17 @@ Audit completed 2026-03-29. Each assignment's acceptance criteria were checked a
 
 ### Summary of Required Actions
 
-| # | Action | Assignment | Priority |
-|---|--------|-----------|----------|
-| 1 | Rename project #31 → `workflow-orchestration-service` | init-existing-repository | Medium |
-| 2 | Verify project linked to repo with correct columns | init-existing-repository | Medium |
-| 3 | Create application plan issue | create-app-plan | High |
-| 4 | Create `plan_docs/tech-stack.md` | create-app-plan | Medium |
-| 5 | Create `plan_docs/architecture.md` | create-app-plan | Medium |
-| 6 | Create milestones (Phase 0–3) | create-app-plan | Medium |
-| 7 | Link plan issue to project, assign milestone | create-app-plan | Medium |
-| 8 | Create `.ai-repository-summary.md` | create-project-structure | Low |
-| 9 | Apply `orchestration:plan-approved` label to plan issue | post-script event | Low |
+| # | Action | Assignment | Priority | Status |
+|---|--------|-----------|----------|--------|
+| 1 | Rename project #31 → `workflow-orchestration-service` | init-existing-repository | Medium | ✅ Done |
+| 2 | Verify project linked to repo with correct columns | init-existing-repository | Medium | ✅ Done |
+| 3 | Create application plan issue | create-app-plan | High | ✅ Done (#3) |
+| 4 | Create `plan_docs/tech-stack.md` | create-app-plan | Medium | ✅ Done |
+| 5 | Create `plan_docs/architecture.md` | create-app-plan | Medium | ✅ Done |
+| 6 | Create milestones (Phase 0–3) | create-app-plan | Medium | ✅ Done |
+| 7 | Link plan issue to project, assign milestone | create-app-plan | Medium | ✅ Done |
+| 8 | Create `.ai-repository-summary.md` | create-project-structure | Low | ✅ Done |
+| 9 | Apply `orchestration:plan-approved` label to plan issue | post-script event | Low | ✅ Done |
 
 ---
 
@@ -253,9 +253,21 @@ All 6 upstream commits have been applied. No further action needed for Pre-Task 
 | Pre-Task | Status | Date |
 |----------|--------|------|
 | **1. Rename References** | **COMPLETE** — 25 references updated across 14 files; old workspace file deleted; 10 archived refs intentionally preserved | 2026-03-29 |
-| **2. Project Setup Audit** | **COMPLETE** (audit only) — 9 actions identified, pending approval to execute | 2026-03-29 |
+| **2. Project Setup Audit** | **COMPLETE** — all 9 actions executed | 2026-03-29 |
 | **3. Upstream Changes** | **COMPLETE** — 6 commits applied (5 new + 1 already done) | 2026-03-29 |
 
-### Remaining Work (Requires Approval)
+### Pre-Task 2 Execution Results
 
-Pre-Task 2 identified 9 actions that require GitHub API operations (creating issues, milestones, renaming project). These are listed in the "Summary of Required Actions" table above and need approval before execution.
+All 9 actions from the project-setup audit have been completed:
+
+| # | Action | Result |
+|---|--------|--------|
+| 1 | Rename project #31 | **DONE** — renamed to `workflow-orchestration-service` via GraphQL |
+| 2 | Verify project linked to repo with correct columns | **DONE** — Status field has Not Started, In Progress, In Review, Done |
+| 3 | Create application plan issue | **DONE** — Issue #3 created with full OS-APOW implementation plan |
+| 4 | Create `plan_docs/tech-stack.md` | **DONE** — documents Python, FastAPI, opencode, Docker, etc. |
+| 5 | Create `plan_docs/architecture.md` | **DONE** — system overview, 4 pillars, data flow, security model |
+| 6 | Create milestones (Phase 0–3) | **DONE** — 4 milestones created (Phase 0 through Phase 3) |
+| 7 | Link plan issue to project, assign milestone | **DONE** — Issue #3 linked to project #31, assigned to Phase 0 milestone |
+| 8 | Create `.ai-repository-summary.md` | **DONE** — repo summary at root |
+| 9 | Apply `orchestration:plan-approved` label to plan issue | **DONE** — label applied to Issue #3 |
