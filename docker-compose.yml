@@ -20,6 +20,9 @@ services:
       - OPENAI_API_KEY
       - GEMINI_API_KEY
       - GH_ORCHESTRATION_AGENT_TOKEN
+      - MCP_MEMORY_STORAGE_BACKEND=sqlite_vec
+      - MCP_MEMORY_SQLITE_PATH=/opt/orchestration/.memory/memory.db
+      - MCP_MEMORY_SQLITE_PRAGMAS=busy_timeout=15000,journal_mode=WAL,synchronous=NORMAL
     volumes:
       - server-memory:/opt/orchestration/.memory
     networks:

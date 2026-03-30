@@ -130,15 +130,11 @@
     },
     "mcp_tool": {
       "sequential-thinking:sequentialthinking": "allow",
-      "memory:create_entities": "allow",
-      "memory:create_relations": "allow",
-      "memory:add_observations": "allow",
-      "memory:delete_entities": "allow",
-      "memory:delete_observations": "allow",
-      "memory:delete_relations": "allow",
-      "memory:read_graph": "allow",
-      "memory:search_nodes": "allow",
-      "memory:open_nodes": "allow"
+      "memory:store_memory": "allow",
+      "memory:retrieve_memory": "allow",
+      "memory:search_by_tag": "allow",
+      "memory:delete_memory": "allow",
+      "memory:check_database_health": "allow"
     }
   },
   "mcp": {
@@ -148,9 +144,11 @@
     },
     "memory": {
       "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
+      "command": ["uvx", "mcp-memory-service"],
       "environment": {
-        "MEMORY_FILE_PATH": "${MEMORY_FILE_PATH}"
+        "MCP_MEMORY_STORAGE_BACKEND": "sqlite_vec",
+        "MCP_MEMORY_SQLITE_PATH": "${MCP_MEMORY_SQLITE_PATH}",
+        "MCP_MEMORY_SQLITE_PRAGMAS": "busy_timeout=15000,journal_mode=WAL,synchronous=NORMAL"
       }
     },
     "github": {

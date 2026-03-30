@@ -10,10 +10,9 @@
     },
     "memory": {
       "type": "stdio",
-      "command": "npx",
+      "command": "uvx",
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
+        "mcp-memory-service"
       ],
       "disabled": false
     },

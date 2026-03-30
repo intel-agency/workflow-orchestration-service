@@ -17,7 +17,9 @@
     "OPENCODE_SERVER_PORT": "${localEnv:OPENCODE_SERVER_PORT}",
     "OPENCODE_SERVER_USERNAME": "${localEnv:OPENCODE_SERVER_USERNAME}",
     "OPENCODE_SERVER_PASSWORD": "${localEnv:OPENCODE_SERVER_PASSWORD}",
-    "MEMORY_FILE_PATH": "${containerWorkspaceFolder}/.memory/memory.jsonl"
+    "MCP_MEMORY_STORAGE_BACKEND": "sqlite_vec",
+    "MCP_MEMORY_SQLITE_PATH": "${containerWorkspaceFolder}/.memory/memory.db",
+    "MCP_MEMORY_SQLITE_PRAGMAS": "busy_timeout=15000,journal_mode=WAL,synchronous=NORMAL"
   },
   "forwardPorts": [
     4096
