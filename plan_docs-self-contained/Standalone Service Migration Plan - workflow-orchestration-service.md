@@ -1,7 +1,7 @@
-# OS-APOW Standalone Orchestration Service — Full Migration & Implementation Plan
+# workflow-orchestration-service Standalone Orchestration Service — Full Migration & Implementation Plan
 
 > **Status:** Ready for Autonomous Implementation  
-> **Architecture Guide:** OS-APOW Architecture Guide v3.2 (expected in `plan_docs/`)  
+> **Architecture Guide:** workflow-orchestration-service Architecture Guide v3.2 (expected in `plan_docs/`)  
 > **Last Updated:** 2026-03-28
 
 ---
@@ -32,7 +32,7 @@ Migrate the orchestration workflow agent from a GitHub Actions-embedded model to
 
 ### Key Insight — Existing Code Coverage
 
-The OS-APOW codebase already provides substantial implementation coverage:
+The workflow-orchestration-service codebase already provides substantial implementation coverage:
 
 | Component | Existing Implementation | Location |
 |-----------|------------------------|----------|
@@ -238,7 +238,7 @@ This is **already implemented** in `orchestrator_sentinel.py` lines 130–175 (`
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| FastAPI application | ✅ Complete | Title: "OS-APOW Event Notifier" |
+| FastAPI application | ✅ Complete | Title: "workflow-orchestration-service Event Notifier" |
 | HMAC SHA-256 webhook verification | ✅ Complete | Via `verify_signature` dependency |
 | Environment validation (startup) | ✅ Complete | Fails fast if `WEBHOOK_SECRET` or `GITHUB_TOKEN` is placeholder |
 | Issue opened event handling | ✅ Complete | Triages by title pattern and labels |
@@ -404,7 +404,7 @@ ENV ORCHESTRATION_ROOT=/opt/orchestration
 Add Python dependency installation for the client-side components that will run inside the container for testing:
 
 ```dockerfile
-# Python dependencies for OS-APOW components
+# Python dependencies for workflow-orchestration-service components
 COPY requirements.txt /opt/orchestration/requirements.txt
 RUN uv pip install --system -r /opt/orchestration/requirements.txt
 ```
@@ -644,7 +644,7 @@ client/
 Create `client/src/config.py` to centralize all configuration:
 
 ```python
-"""Centralized configuration for the OS-APOW client."""
+"""Centralized configuration for the workflow-orchestration-client."""
 
 import os
 import sys
@@ -1082,7 +1082,7 @@ Define the GitHub App configuration:
 
 | Setting | Value |
 |---------|-------|
-| App Name | `OS-APOW Orchestration Bot` |
+| App Name | `workflow-orchestration-service Orchestration Bot` |
 | Webhook URL | `https://<client-host>/webhooks/github` |
 | Webhook Secret | (generated, stored as `WEBHOOK_SECRET`) |
 | Homepage URL | Repo URL |

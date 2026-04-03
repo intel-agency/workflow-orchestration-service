@@ -1,10 +1,10 @@
-# OS-APOW Standalone Orchestration Service — Implementation Specification v2.0
+# workflow-orchestration-service Standalone Orchestration Service — Implementation Specification v2.0
 
 ## Project
 
 **Repository:** `intel-agency/workflow-orchestration-service`  
 **Branch:** `feature/standalone-orchestration-service-migration`  
-**PR:** [#2 — feat: OS-APOW Standalone Orchestration Service — Phase 0 Foundation](https://github.com/intel-agency/workflow-orchestration-service/pull/2)  
+**PR:** [#2 — feat: workflow-orchestration-service Standalone Orchestration Service — Phase 0 Foundation](https://github.com/intel-agency/workflow-orchestration-service/pull/2)  
 **Date:** 2026-03-29
 
 ---
@@ -15,7 +15,7 @@
 
 | Document | Path | Purpose |
 |---|---|---|
-| **Migration & Implementation Plan** | [`OS-APOW-standalone-service-migration-plan.md`](OS-APOW-standalone-service-migration-plan.md) | Full 6-phase migration plan with architecture, code inventory, task breakdowns, validation plans, agent assignment matrix, risk register, and file migration map |
+| **Migration & Implementation Plan** | [`Standalone Service Migration Plan - workflow-orchestration-service.md`](Standalone Service Migration Plan - workflow-orchestration-service.md) | Full 6-phase migration plan with architecture, code inventory, task breakdowns, validation plans, agent assignment matrix, risk register, and file migration map |
 
 ### Existing Project Plan Docs (seeded at clone time)
 
@@ -23,8 +23,8 @@ These documents are expected to exist in the parent `plan_docs/` directory, seed
 
 | Document | Expected Location | Purpose |
 |---|---|---|
-| Architecture Guide v3.2 | `plan_docs/OS-APOW Architecture Guide v3.2.md` | System-level diagrams, security boundaries, 4-pillar overview |
-| Development Plan v4.2 | `plan_docs/OS-APOW Development Plan v4.2.md` | Phased roadmap, guiding principles, user stories, risk mitigations |
+| Architecture Guide v3.2 | `plan_docs/workflow-orchestration-service Architecture Guide v3.2.md` | System-level diagrams, security boundaries, 4-pillar overview |
+| Development Plan v4.2 | `plan_docs/workflow-orchestration-service Development Plan v4.2.md` | Phased roadmap, guiding principles, user stories, risk mitigations |
 | Architecture doc | `plan_docs/architecture.md` | System overview, data flow, security model |
 | Tech Stack doc | `plan_docs/tech-stack.md` | Python, FastAPI, opencode, Docker, uv |
 
@@ -62,7 +62,7 @@ GitHub App (webhooks) → Orchestration Client (FastAPI + Sentinel, :8000)
                         Orchestration Server (opencode serve, Docker, :4096)
 ```
 
-See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-executive-summary) for the full architecture diagrams, component responsibilities, network topology, and data flow.
+See the [Migration Plan §1–2](Standalone Service Migration Plan - workflow-orchestration-service.md#1-executive-summary) for the full architecture diagrams, component responsibilities, network topology, and data flow.
 
 ---
 
@@ -70,7 +70,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 
 ### Step 1: Phase 0 — Foundation & Dockerfile Consolidation
 
-**Source:** [Migration Plan §4](OS-APOW-standalone-service-migration-plan.md#4-phase-0--foundation--dockerfile-consolidation)
+**Source:** [Migration Plan §4](Standalone Service Migration Plan - workflow-orchestration-service.md#4-phase-0--foundation--dockerfile-consolidation)
 
 **Objective:** Update the Dockerfile to include all necessary files for a self-contained orchestration service image.
 
@@ -81,7 +81,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 | P0-T3 | Update hardcoded paths in scripts to use `$ORCHESTRATION_ROOT` | `developer` | P0-T2 |
 | P0-T4 | Install Python dependencies (FastAPI, httpx, Pydantic, uvicorn) in image | `devops-engineer` | P0-T2 |
 
-**Validation:** Docker image builds, all files present at expected paths, scripts executable, Python imports succeed, `ORCHESTRATION_ROOT` set. See [Migration Plan §4.2](OS-APOW-standalone-service-migration-plan.md#42-phase-0--validation-plan) for full validation matrix (V0-1 through V0-7).
+**Validation:** Docker image builds, all files present at expected paths, scripts executable, Python imports succeed, `ORCHESTRATION_ROOT` set. See [Migration Plan §4.2](Standalone Service Migration Plan - workflow-orchestration-service.md#42-phase-0--validation-plan) for full validation matrix (V0-1 through V0-7).
 
 **Gate:** `pwsh -NoProfile -File ./scripts/validate.ps1 -All` passes clean.
 
@@ -89,7 +89,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 
 ### Step 2: Phase 1 — Server: Self-Contained Orchestration Service
 
-**Source:** [Migration Plan §5](OS-APOW-standalone-service-migration-plan.md#5-phase-1--server-self-contained-orchestration-service)
+**Source:** [Migration Plan §5](Standalone Service Migration Plan - workflow-orchestration-service.md#5-phase-1--server-self-contained-orchestration-service)
 
 **Objective:** Verify the Docker image can start opencode server, accept prompts, execute orchestration workflows, and exit cleanly.
 
@@ -101,7 +101,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 | P1-T4 | Test container lifecycle (start/stop/restart/kill recovery) | `qa-test-engineer` | P1-T1 |
 | P1-T5 | Create test fixtures for canned prompts in `test/fixtures/` | `qa-test-engineer` | None |
 
-**Validation:** Server starts and listens on `:4096`, canned prompts execute, container lifecycle is clean, missing env vars fail fast. See [Migration Plan §5.2](OS-APOW-standalone-service-migration-plan.md#52-phase-1--validation-plan) (V1-1 through V1-8).
+**Validation:** Server starts and listens on `:4096`, canned prompts execute, container lifecycle is clean, missing env vars fail fast. See [Migration Plan §5.2](Standalone Service Migration Plan - workflow-orchestration-service.md#52-phase-1--validation-plan) (V1-1 through V1-8).
 
 **Gate:** `pwsh -NoProfile -File ./scripts/validate.ps1 -All` passes clean.
 
@@ -109,7 +109,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 
 ### Step 3: Phase 2 — Client: Remote Prompt Script & Session Management
 
-**Source:** [Migration Plan §6](OS-APOW-standalone-service-migration-plan.md#6-phase-2--client-remote-prompt-script--session-management)
+**Source:** [Migration Plan §6](Standalone Service Migration Plan - workflow-orchestration-service.md#6-phase-2--client-remote-prompt-script--session-management)
 
 **Objective:** Build the client-side Sentinel Orchestrator that polls GitHub for queued issues and dispatches prompts to the remote server.
 
@@ -123,7 +123,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 
 **Key integration point:** The Sentinel calls `devcontainer-opencode.sh prompt -p <instruction> -u <server-url>` which invokes `opencode run --attach <server-url>`. This is the same shell bridge, now dispatching remotely.
 
-**Validation:** Client installs, config loads, shell bridge dispatches remotely, Sentinel polls/claims/dispatches, heartbeats post, credentials scrubbed. See [Migration Plan §6.2](OS-APOW-standalone-service-migration-plan.md#62-phase-2--validation-plan) (V2-1 through V2-11).
+**Validation:** Client installs, config loads, shell bridge dispatches remotely, Sentinel polls/claims/dispatches, heartbeats post, credentials scrubbed. See [Migration Plan §6.2](Standalone Service Migration Plan - workflow-orchestration-service.md#62-phase-2--validation-plan) (V2-1 through V2-11).
 
 **Gate:** `pwsh -NoProfile -File ./scripts/validate.ps1 -All` passes clean.
 
@@ -131,7 +131,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 
 ### Step 4: Phase 3 — Client: Webhook Handler & Event Routing
 
-**Source:** [Migration Plan §7](OS-APOW-standalone-service-migration-plan.md#7-phase-3--client-webhook-handler--event-routing)
+**Source:** [Migration Plan §7](Standalone Service Migration Plan - workflow-orchestration-service.md#7-phase-3--client-webhook-handler--event-routing)
 
 **Objective:** Integrate the FastAPI webhook handler into the client. Receives GitHub events, triages into WorkItems, and supports dual-mode operation (webhook + polling).
 
@@ -144,7 +144,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 | P3-T5 | Create client Dockerfile | `devops-engineer` | P3-T4 |
 | P3-T6 | Create/update docker-compose.yml for local dev (server + client) | `devops-engineer` | P3-T5, P1-T1 |
 
-**Validation:** Webhook rejects bad signatures, accepts valid events, prompt assembly matches Actions workflow output, dual-mode runs concurrently, docker-compose orchestrates both services. See [Migration Plan §7.2](OS-APOW-standalone-service-migration-plan.md#72-phase-3--validation-plan) (V3-1 through V3-11).
+**Validation:** Webhook rejects bad signatures, accepts valid events, prompt assembly matches Actions workflow output, dual-mode runs concurrently, docker-compose orchestrates both services. See [Migration Plan §7.2](Standalone Service Migration Plan - workflow-orchestration-service.md#72-phase-3--validation-plan) (V3-1 through V3-11).
 
 **Gate:** `pwsh -NoProfile -File ./scripts/validate.ps1 -All` passes clean.
 
@@ -152,7 +152,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 
 ### Step 5: Phase 4 — GitHub App Event Source Integration
 
-**Source:** [Migration Plan §8](OS-APOW-standalone-service-migration-plan.md#8-phase-4--github-app-event-source-integration)
+**Source:** [Migration Plan §8](Standalone Service Migration Plan - workflow-orchestration-service.md#8-phase-4--github-app-event-source-integration)
 
 **Objective:** Create and configure a GitHub App that delivers repository events to the client's webhook endpoint, replacing the GitHub Actions `on: issues` trigger.
 
@@ -163,7 +163,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 | P4-T3 | Test event delivery pipeline (real GitHub events → client → server → issue update) | `qa-test-engineer` | P4-T1, P4-T2 |
 | P4-T4 | Implement webhook retry handling (idempotency via delivery ID tracking) | `backend-developer` | P3-T1 |
 
-**Validation:** GitHub App delivers webhooks, HMAC verification works with real secrets, idempotency on retry, end-to-end with real events, response under 10s. See [Migration Plan §8.2](OS-APOW-standalone-service-migration-plan.md#82-phase-4--validation-plan) (V4-1 through V4-7).
+**Validation:** GitHub App delivers webhooks, HMAC verification works with real secrets, idempotency on retry, end-to-end with real events, response under 10s. See [Migration Plan §8.2](Standalone Service Migration Plan - workflow-orchestration-service.md#82-phase-4--validation-plan) (V4-1 through V4-7).
 
 **Gate:** `pwsh -NoProfile -File ./scripts/validate.ps1 -All` passes clean.
 
@@ -171,7 +171,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 
 ### Step 6: Phase 5 — Production Hardening & Observability
 
-**Source:** [Migration Plan §9](OS-APOW-standalone-service-migration-plan.md#9-phase-5--production-hardening--observability)
+**Source:** [Migration Plan §9](Standalone Service Migration Plan - workflow-orchestration-service.md#9-phase-5--production-hardening--observability)
 
 **Objective:** Harden both server and client for production use with structured logging, resource limits, budget monitoring, and operational documentation.
 
@@ -183,7 +183,7 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 | P5-T4 | Operational runbook (`docs/runbook.md`) | `documentation-expert` | P5-T1, P5-T2 |
 | P5-T5 | Monitoring and alerting endpoints (`/health` with server status, `/metrics`) | `devops-engineer` | P5-T1 |
 
-**Validation:** JSON-L logs parse, resource limits enforced, budget monitor pauses sentinel, health check reflects real state, runbook accurate. See [Migration Plan §9.2](OS-APOW-standalone-service-migration-plan.md#92-phase-5--validation-plan) (V5-1 through V5-8).
+**Validation:** JSON-L logs parse, resource limits enforced, budget monitor pauses sentinel, health check reflects real state, runbook accurate. See [Migration Plan §9.2](Standalone Service Migration Plan - workflow-orchestration-service.md#92-phase-5--validation-plan) (V5-1 through V5-8).
 
 **Gate:** `pwsh -NoProfile -File ./scripts/validate.ps1 -All` passes clean.
 
@@ -191,18 +191,18 @@ See the [Migration Plan §1–2](OS-APOW-standalone-service-migration-plan.md#1-
 
 ## Cross-Cutting Concerns
 
-Detailed in [Migration Plan §10](OS-APOW-standalone-service-migration-plan.md#10-cross-cutting-concerns):
+Detailed in [Migration Plan §10](Standalone Service Migration Plan - workflow-orchestration-service.md#10-cross-cutting-concerns):
 
 - **Security:** HMAC webhook verification, `scrub_secrets()` on all posted content, container isolation, minimum token scopes
 - **Error handling:** Health check failures → backoff, missed webhooks → polling recovery, subprocess timeouts → kill + label, Sentinel crash → restart + reconcile
 - **Testing strategy:** Unit (pytest), integration (shell bridge + docker), end-to-end (real GitHub events), load (concurrent issues)
-- **Configuration:** 19 environment variables documented with defaults — see [Migration Plan §10.4](OS-APOW-standalone-service-migration-plan.md#104-configuration-reference)
+- **Configuration:** 19 environment variables documented with defaults — see [Migration Plan §10.4](Standalone Service Migration Plan - workflow-orchestration-service.md#104-configuration-reference)
 
 ---
 
 ## Agent Assignment Summary
 
-Full matrix in [Migration Plan §11](OS-APOW-standalone-service-migration-plan.md#11-agent-assignment-matrix).
+Full matrix in [Migration Plan §11](Standalone Service Migration Plan - workflow-orchestration-service.md#11-agent-assignment-matrix).
 
 | Phase | Primary Agents | Task Count |
 |---|---|---|
@@ -220,7 +220,7 @@ Maximum delegation depth: 2 (orchestrator → specialist → sub-specialist).
 
 ## Risk Register
 
-Top risks from [Migration Plan §12](OS-APOW-standalone-service-migration-plan.md#12-risk-register):
+Top risks from [Migration Plan §12](Standalone Service Migration Plan - workflow-orchestration-service.md#12-risk-register):
 
 | ID | Risk | Mitigation |
 |---|---|---|

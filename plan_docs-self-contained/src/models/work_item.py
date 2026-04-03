@@ -1,11 +1,11 @@
 """
-OS-APOW Unified Work Item Model
+workflow-orchestration-service Unified Work Item Model
 
 Canonical data model shared by both the Sentinel Orchestrator and the
 Work Event Notifier. Both components import from this module to prevent
 model divergence.
 
-See: OS-APOW Plan Review, I-1 / R-3
+See: workflow-orchestration-service Plan Review, I-1 / R-3
 """
 
 import re
@@ -34,7 +34,7 @@ class WorkItemStatus(str, Enum):
 
 
 class WorkItem(BaseModel):
-    """Unified work item used across all OS-APOW components.
+    """Unified work item used across all workflow-orchestration-service components.
 
     Fields populated by the Notifier are marked Optional so the Sentinel
     can construct WorkItems from its own polling results without requiring

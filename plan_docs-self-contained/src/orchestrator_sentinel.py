@@ -1,8 +1,8 @@
 ﻿"""
-OS-APOW Sentinel Orchestrator
+workflow-orchestration-service Sentinel Orchestrator
 Implementation of Phase 1: Story 2 & 3.
 
-This script acts as the 'Brain' of the OS-APOW system. It:
+This script acts as the 'Brain' of the workflow-orchestration-service system. It:
 1. Polls a GitHub repo for issues labeled 'agent:queued'.
 2. Claims the task using assign-then-verify distributed locking.
 3. Manages the worker lifecycle via './scripts/devcontainer-opencode.sh'.
@@ -54,7 +54,7 @@ logging.basicConfig(
     format=f"%(asctime)s [%(levelname)s] {SENTINEL_ID} - %(message)s",
     handlers=[logging.StreamHandler(sys.stdout)],
 )
-logger = logging.getLogger("OS-APOW-Sentinel")
+logger = logging.getLogger("workflow-orchestration-service-sentinel")
 
 # Graceful shutdown flag (R-4)
 _shutdown_requested = False

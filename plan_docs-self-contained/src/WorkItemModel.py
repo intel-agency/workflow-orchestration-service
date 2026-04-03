@@ -1,5 +1,5 @@
 """
-OS-APOW Unified Work Item Model
+workflow-orchestration-service Unified Work Item Model
 Updated with enhanced telemetry scrubbing to protect logs during subagent execution.
 """
 
