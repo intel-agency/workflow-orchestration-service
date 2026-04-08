@@ -1,0 +1,14 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "hatchling": "^0.2.2",
+      },
+    },
+  },
+  "packages": {
+    "hatchling": ["hatchling@0.2.2", "", {}, "sha512-42z6mSTlAzdTAPA8FMLc+uN0Z6bw+LDdZs/7+6C8bX0Of/gAuBXI7H0pyUMU64odUaSM2veIKhn8oldYUTljEw=="],
+  }
+}
