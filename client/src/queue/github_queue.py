@@ -20,6 +20,7 @@ from src.models.work_item import (
     WorkItemStatus,
     WorkItem,
     scrub_secrets,
+    classify_task_type,
 )
 
 logger = logging.getLogger("OS-APOW")
@@ -121,13 +122,9 @@ class GitHubQueue(ITaskQueue):
         work_items = []
         for issue in issues:
             labels = [label["name"] for label in issue.get("labels", [])]
-            task_type = TaskType.IMPLEMENT
-            if "agent:plan" in labels or "[Plan]" in issue.get("title", ""):
-                task_type = TaskType.PLAN
-            elif "bug" in labels:
-                task_type = TaskType.BUGFIX
+            task_type = classify_task_type(issue)
 
-            repo_slug = "/".join(issue["html_url"].split("/")[3:5])
+            repo_slug = f"{self.org}/{self.repo}"
 
             work_items.append(
                 WorkItem(
