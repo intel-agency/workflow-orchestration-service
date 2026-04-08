@@ -36,9 +36,8 @@ class WorkItemStatus(str, Enum):
 class WorkItem(BaseModel):
     """Unified work item used across all OS-APOW components.
 
-    Fields populated by the Notifier are marked Optional so the Sentinel
-    can construct WorkItems from its own polling results without requiring
-    the raw webhook payload.
+    All fields are required. Both the Notifier and Sentinel construct
+    WorkItems with all fields populated from their respective data sources.
     """
 
     id: str
@@ -52,18 +51,15 @@ class WorkItem(BaseModel):
 
 
 # --- Credential Scrubber (R-7) ---
-# Regex patterns that match common secret formats. Used to sanitize
-# worker output before posting to GitHub issue comments.
-
 _SECRET_PATTERNS = [
-    re.compile(r"ghp_[A-Za-z0-9_]{36,}"),  # GitHub PAT (classic)
-    re.compile(r"ghs_[A-Za-z0-9_]{36,}"),  # GitHub App installation token
-    re.compile(r"gho_[A-Za-z0-9_]{36,}"),  # GitHub OAuth token
-    re.compile(r"github_pat_[A-Za-z0-9_]{22,}"),  # GitHub fine-grained PAT
+    re.compile(r"ghp_[A-Za-z0-9_]{36,}"),
+    re.compile(r"ghs_[A-Za-z0-9_]{36,}"),
+    re.compile(r"gho_[A-Za-z0-9_]{36,}"),
+    re.compile(r"github_pat_[A-Za-z0-9_]{22,}"),
     re.compile(r"Bearer\s+[A-Za-z0-9\-._~+/]+=*", re.IGNORECASE),
     re.compile(r"token\s+[A-Za-z0-9\-._~+/]{20,}", re.IGNORECASE),
-    re.compile(r"sk-[A-Za-z0-9]{20,}"),  # OpenAI-style API keys
-    re.compile(r"[A-Za-z0-9]{32,}\.zhipu[A-Za-z0-9]*"),  # ZhipuAI keys
+    re.compile(r"sk-[A-Za-z0-9]{20,}"),
+    re.compile(r"[A-Za-z0-9]{32,}\.zhipu[A-Za-z0-9]*"),
 ]
 
 
@@ -74,3 +70,19 @@ def scrub_secrets(text: str, replacement: str = "***REDACTED***") -> str:
     for pattern in _SECRET_PATTERNS:
         text = pattern.sub(replacement, text)
     return text
+
+
+def classify_task_type(issue: dict) -> TaskType:
+    """Determine the TaskType from issue title and labels.
+
+    Centralized logic used by both the Notifier and the Sentinel
+    to ensure consistent classification.
+    """
+    labels = [label["name"] for label in issue.get("labels", [])]
+    title = issue.get("title", "")
+
+    if "[Application Plan]" in title or "[Plan]" in title or "agent:plan" in labels:
+        return TaskType.PLAN
+    elif "bug" in labels:
+        return TaskType.BUGFIX
+    return TaskType.IMPLEMENT
