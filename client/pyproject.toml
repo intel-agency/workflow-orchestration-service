@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 
 [project]
-name = "os-apow-client"
+name = "7"
 version = "0.1.0"
 description = "OS-APOW Orchestration Client — Webhook handler and Sentinel orchestrator"
 requires-python = ">=3.12"

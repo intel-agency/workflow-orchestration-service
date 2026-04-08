@@ -110,7 +110,7 @@ case "$COMMAND" in
             echo "error: -f <prompt-file> or -p <prompt> is required for the 'prompt' command" >&2
             usage
         fi
-        for var in ZHIPU_API_KEY KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY GITHUB_TOKEN; do
+        for var in ZHIPU_API_KEY KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY GH_ORCHESTRATION_AGENT_TOKEN; do
             if [[ -z "${!var:-}" ]]; then
                 echo "::error::${var} is not set" >&2
                 exit 1

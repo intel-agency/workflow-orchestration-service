@@ -140,9 +140,10 @@ async def handle_github_webhook(
         label_name = payload.get("label", {}).get("name", "")
 
         if label_name == WorkItemStatus.QUEUED.value:
+            # Already queued — the Sentinel will pick it up via polling
             safe_label_name = _sanitize_for_log(label_name)
             logger.info(
-                f"Issue #{issue['number']} labeled {safe_label_name} - Sentinel will poll"
+                f"Issue #{issue['number']} labeled {safe_label_name} — Sentinel will poll"
             )
             return {"status": "acknowledged", "issue": issue["number"]}
 
