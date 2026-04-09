@@ -218,9 +218,21 @@ if ! kill -0 "$OPENCODE_PID" 2>/dev/null; then
 fi
 echo "opencode process $OPENCODE_PID confirmed running after 1s"
 
-# Stream the client log to stdout in real-time so CI can see it
-tail -f "$OUTPUT_LOG" &
+# Stream the client log to stdout in real-time so CI can see it.
+# Prefix subagent delegation events (•✓) and tool operations (→%⚙) so they
+# are visually distinct from [server] / [watchdog] lines in the CI log.
+# Use a FIFO to separate the 'tail -f' PID from the sed pipeline so we can kill
+# 'tail -f' explicitly during cleanup. Without this, killing just the pipeline end
+# (sed / TAIL_PID) leaves 'tail -f' orphaned with no EOF signal, holding the
+# devcontainer exec cgroup open indefinitely. (Same pattern as server log tailer.)
+OUTPUT_TAIL_RAW_PID=""
+_output_pipe=$(mktemp -u /tmp/opencode-output-tail.XXXXXX)
+mkfifo "$_output_pipe"
+tail -f "$OUTPUT_LOG" > "$_output_pipe" 2>/dev/null &
+OUTPUT_TAIL_RAW_PID=$!
+sed -u -e '/[•✓]/s/^/[subagent] /' -e '/[→%⚙]/s/^/[agent] /' < "$_output_pipe" &
 TAIL_PID=$!
+rm -f "$_output_pipe"  # safe to remove after both ends are open
 
 # Stream server-side subagent traces to CI stdout.
 # The server runs at DEBUG with --print-logs, capturing subagent tool calls,
@@ -248,7 +260,10 @@ SERVER_TAIL_RAW_PID=""  # PID of the 'tail -f' process (must be killed to avoid 
 #   ruleset=[{"permission"       → terminal line of multi-line bash permission pre-check blob (huge JSON array)
 #   action={"permission"         → terminal line of multi-line bash permission post-check blob
 #   mcp stderr: .*running on     → MCP server startup "running on stdio" line
-_SERVER_LOG_NOISE='service=bus |service=tool\.registry |service=permission |service=bash-tool |service=provider |service=lsp |service=file\.time |service=snapshot |cwd=.*tracking|service=session\.processor |service=session\.compaction |service=session\.prompt status=|service=format |service=vcs |service=storage |ruleset=\[\{"permission|action=\{"permission|mcp stderr: .*running on'
+#   service=llm .*stream$        → LLM stream start per session step (one per step; step=N loop line already tracks this)
+#   session\.prompt step=.*loop$ → Session prompt loop iteration (covered by Thinking: + [subagent] lines)
+#   mcp stderr:\s*$              → Blank mcp stderr flush lines (no content)
+_SERVER_LOG_NOISE='service=bus |service=tool\.registry |service=permission |service=bash-tool |service=provider |service=lsp |service=file\.time |service=snapshot |cwd=.*tracking|service=session\.processor |service=session\.compaction |service=session\.prompt status=|service=format |service=vcs |service=storage |ruleset=\[\{"permission|action=\{"permission|mcp stderr: .*running on|service=llm .*stream$|session\.prompt step=.*loop$|mcp stderr:\s*$'
 if [[ -f "$SERVER_LOG" ]]; then
     _server_log_start_lines=$(wc -l < "$SERVER_LOG" 2>/dev/null || echo 0)
     # Use a FIFO to separate the 'tail -f' PID from the filter pipeline so we can
@@ -260,7 +275,7 @@ if [[ -f "$SERVER_LOG" ]]; then
     mkfifo "$_server_log_pipe"
     tail -f -n +$(( _server_log_start_lines + 1 )) "$SERVER_LOG" 2>/dev/null > "$_server_log_pipe" &
     SERVER_TAIL_RAW_PID=$!
-    grep -Ev "$_SERVER_LOG_NOISE" < "$_server_log_pipe" | sed -u 's/^/[server] /' &
+    grep -Ev "$_SERVER_LOG_NOISE" < "$_server_log_pipe" | grep -v '^\s*$' | sed -u 's/^/[server] /' &
     SERVER_TAIL_PID=$!
     rm -f "$_server_log_pipe"  # safe to remove after both ends are open
     echo "Server log tailer started (tail pid ${SERVER_TAIL_RAW_PID} filter pid ${SERVER_TAIL_PID}), streaming from line $(( _server_log_start_lines + 1 ))"
@@ -387,10 +402,10 @@ while kill -0 "$OPENCODE_PID" 2>/dev/null; do
         else
             echo "[watchdog] client output idle ${output_idle}s, server read I/O active (read_bytes=${_cur_server_read}, write_idle=${write_idle}s/${READ_ONLY_GRACE_SECS}s grace) — subagent likely running"
         fi
-        # Surface the most recent server log activity for subagent visibility.
-        # Show the last few non-empty lines so operators see what the subagent
-        # is actually doing (tool calls, LLM requests, file operations).
-        if [[ -f "$SERVER_LOG" ]]; then
+        # Surface the most recent server log activity in debug mode only.
+        # (In normal mode, [subagent] prefixes on the client stream already
+        # provide sufficient progress visibility.)
+        if [[ "${DEBUG_ORCHESTRATOR:-}" == "true" && -f "$SERVER_LOG" ]]; then
             _recent=$(tail -20 "$SERVER_LOG" 2>/dev/null | grep -Ev "$_SERVER_LOG_NOISE" | grep -v '^$' | tail -3)
             if [[ -n "$_recent" ]]; then
                 echo "[watchdog] recent server activity:"
@@ -431,6 +446,15 @@ done
 
 wait "$OPENCODE_PID" 2>/dev/null
 OPENCODE_EXIT=$?
+# Stop the client output tailer — must kill 'tail -f' (OUTPUT_TAIL_RAW_PID) explicitly.
+# Killing only the filter pipeline end (TAIL_PID / sed) leaves 'tail -f' orphaned:
+# the OUTPUT_LOG file only gets EOF when the opencode process exits, but after 'wait'
+# it has already exited; however the FIFO has no writer once sed dies, so 'tail -f'
+# would block-on-empty forever without an explicit kill.
+if [[ -n "${OUTPUT_TAIL_RAW_PID:-}" ]]; then
+    kill "$OUTPUT_TAIL_RAW_PID" 2>/dev/null
+    wait "$OUTPUT_TAIL_RAW_PID" 2>/dev/null
+fi
 kill "$TAIL_PID" 2>/dev/null
 wait "$TAIL_PID" 2>/dev/null
 # Stop the server log tailer — must kill 'tail -f' (SERVER_TAIL_RAW_PID) explicitly.

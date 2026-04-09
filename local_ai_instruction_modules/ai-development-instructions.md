@@ -96,9 +96,9 @@ Format: `uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.
    - Analyzing dependencies and relationships
    - Debugging and troubleshooting workflows
 
-2. **Memory Tool** (`read_graph`, `search_nodes`, `create_entities`, `add_observations`) - **MUST USE on every non-trivial task** for:
-   - **At task START**: Call `read_graph`/`search_nodes` to load prior context BEFORE planning
-   - **After significant work**: Persist findings, decisions, patterns via `create_entities`/`add_observations`
+2. **Memory Tool** (`retrieve_memory`, `search_by_tag`, `store_memory`, `delete_memory`) - **MUST USE on every non-trivial task** for:
+   - **At task START**: Call `retrieve_memory`/`search_by_tag` to load prior context BEFORE planning
+   - **After significant work**: Persist findings, decisions, patterns via `store_memory`
    - **At task END**: Store outcomes and lessons learned
    - Storing important context between tasks
    - Tracking project-specific patterns and conventions

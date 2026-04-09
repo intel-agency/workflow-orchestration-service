@@ -54,7 +54,7 @@ Shared options:
 
 Environment variables:
   DEVCONTAINER_CONFIG, WORKSPACE_FOLDER, OPENCODE_SERVER_URL
-  ZHIPU_API_KEY, KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY, GH_ORCHESTRATION_AGENT_TOKEN  (required for 'prompt')
+  ZHIPU_API_KEY, KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY, GITHUB_TOKEN  (required for 'prompt')
 EOF
     exit 1
 }
@@ -179,11 +179,11 @@ case "$COMMAND" in
                 fi
                 echo ""
                 echo "=== Memory ==="
-                mem="${MEMORY_FILE_PATH:-$PWD/.memory/memory.jsonl}"
+                mem="${MCP_MEMORY_SQLITE_PATH:-$PWD/.memory/memory.db}"
                 if [[ -f "$mem" ]]; then
-                    echo "Memory file: $mem ($(wc -l < "$mem") entries, $(wc -c < "$mem") bytes)"
+                    echo "Memory database: $mem ($(stat -c%s "$mem") bytes)"
                 else
-                    echo "Memory file: $mem (not found)"
+                    echo "Memory database: $mem (not found)"
                 fi
                 echo ""
                 echo "=== Recent Server Log (last 20 lines) ==="

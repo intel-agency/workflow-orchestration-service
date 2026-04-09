@@ -14,6 +14,8 @@ The supervisor evaluates the report and decides:
 
 This creates a **leapfrog** pattern: orchestrator prompts supervisor → supervisor prompts orchestrator → repeat. The supervisor course-corrects across runs without human intervention.
 
+**Note**: the orchestrator supervisor, or "orchestrator of orchestrators" will be known as a "maestro" (i.e. directs orchestrations)
+
 ## Feedback
 
 **This is a strong idea.** It directly addresses the biggest weakness we hit in november57-b: the orchestrator failed, hallucinated a reason, output "Manual Steps Required," and the pipeline stopped dead. There was no recovery path — the workflow just ended. A supervisor would have caught the structured error, seen "PR creation returned non-zero," and could have re-prompted with "The branch has no commits ahead of main. Push an initial commit first, then retry `gh pr create`."
