@@ -2,6 +2,14 @@
 
 Run the full opencode server + devcontainer orchestration stack on your local machine and dispatch prompts interactively — no GitHub Actions workflow runs required.
 
+If you need the full service documentation rather than just the startup path, use:
+
+- [Orchestration Services Documentation](./orchestration-services.md)
+- [Orchestration Server](./orchestration-server.md)
+- [Orchestration Clients](./orchestration-clients.md)
+- [Orchestration Support Services](./orchestration-support-services.md)
+- [Orchestration Scripts Reference](./orchestration-scripts-reference.md)
+
 ---
 
 ## 1. Prerequisites
@@ -290,6 +298,11 @@ Host Machine                          Devcontainer (Docker)
 
 | File | Purpose |
 |------|---------|
+| `docs/orchestration-services.md` | Index for the full service documentation set |
+| `docs/orchestration-server.md` | Server lifecycle, configuration, and operational behavior |
+| `docs/orchestration-clients.md` | Client modes, usage guidance, and prompt preparation |
+| `docs/orchestration-support-services.md` | GitHub listener/dispatcher/failure-notifier support services |
+| `docs/orchestration-scripts-reference.md` | Role-based script catalog |
 | `scripts/prompt-direct.sh` | Direct-mode prompt dispatcher (recommended, no server) |
 | `scripts/devcontainer-opencode.sh` | Main lifecycle CLI (up/start/prompt/status/stop/down) |
 | `scripts/start-opencode-server.sh` | Server daemon bootstrapper (runs inside container) |
@@ -299,4 +312,3 @@ Host Machine                          Devcontainer (Docker)
 | `.env.example` | Environment variable template |
 | `.devcontainer/devcontainer.json` | Consumer devcontainer config |
 | `docs/local-lan-orchestration-plan.md` | Full plan (Phases 1-3) |
-

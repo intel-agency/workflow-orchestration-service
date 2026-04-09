@@ -1,5 +1,10 @@
 # Local & LAN-Local Opencode Server Devcontainer Orchestration
 
+> Historical planning note: this document contains now-stale gap analysis from
+> before the current docs refresh. For the active architecture direction, use
+> [onprem-gap-analysis.md](./onprem-gap-analysis.md) and
+> [server-system-service-plan.md](./server-system-service-plan.md).
+
 ## Executive Summary
 
 Enable running the full opencode server + devcontainer orchestration stack **locally** (developer workstation) and on the **LAN** (e.g. a dedicated Linux box / home lab), so prompts can be dispatched and validated interactively without waiting for GitHub Actions workflow runs.
