@@ -113,12 +113,7 @@ async def handle_github_webhook(
     action = payload.get("action")
     repo_slug = payload.get("repository", {}).get("full_name", "")
 
-    safe_event_type = _sanitize_for_log(event_type)
-    safe_action = _sanitize_for_log(action)
-    safe_repo_slug = _sanitize_for_log(repo_slug)
-    logger.info(
-        f"Received event: {safe_event_type}.{safe_action} from {safe_repo_slug}"
-    )
+    logger.info("Received GitHub webhook event")
 
     # issues.opened
     if event_type == "issues" and action == "opened":
@@ -141,15 +136,14 @@ async def handle_github_webhook(
 
         if label_name == WorkItemStatus.QUEUED.value:
             # Already queued — the Sentinel will pick it up via polling
-            safe_label_name = _sanitize_for_log(label_name)
             logger.info(
-                f"Issue #{issue['number']} labeled {safe_label_name} — Sentinel will poll"
+                "Queued issue label received; sentinel will poll for queued work items"
             )
             return {"status": "acknowledged", "issue": issue["number"]}
 
     # workflow_dispatch
     if event_type == "workflow_dispatch":
-        logger.info(f"Workflow dispatch received for {safe_repo_slug}")
+        logger.info("Workflow dispatch event received")
         return {"status": "acknowledged", "event": "workflow_dispatch"}
 
     return {"status": "ignored", "reason": "No actionable OS-APOW event mapping found"}
