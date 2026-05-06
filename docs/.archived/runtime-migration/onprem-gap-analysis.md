@@ -363,3 +363,16 @@ The right next move is:
 3. preserve the current devcontainer CLI as a compatibility layer
 4. keep GitHub-centric triggers and workflow state unchanged while that runtime
    migration happens
+
+**NOTES**:
+- Your directional conclusions are all correct and match the explicit decision we made in the last revision of the plan.
+- Doc sprawl, in addition to drift, is a real problem that needs a solution. Do not only mark historical docs or sections as such; move them to `.archived`.
+- Archiving docs means we need one true canonical doc for the current runtime and migration plan. That should be the doc in `docs/` that is not marked as archived. This should be a new doc that:
+  - solves sprawl by documenting everything in the main doc, or in two docs if that makes more sense
+  - solves drift by archiving old docs and clearly listing all agreed requirements and decisions in one place, making all other docs historical reference points rather than active narratives
+- The prebuild repo is out; image ownership belongs in this repo. This should be documented as a decision we already made.
+- TLS, auth, and firewall hardening are lower priority and should be treated as a second phase. Since we decided to run the server locally or on a trusted LAN, we can accept the risk for now and focus first on solidifying the runtime contract and hosting model.
+  - This is an intentional simplification to de-risk the work and reduce the timeline.
+  - The one cross-network interface would be the GitHub Actions orchestration match-case workflow calling the local server remotely with the `--prompt` argument.
+  - This interface may need a simple auth mechanism, such as ngrok, Tailscale, or an equivalent low-friction option. I am open to options here.
+
