@@ -276,6 +276,18 @@ from them are consolidated in this document.
 
 Key references:
 
+- `plan_docs-self-contained/IMPLEMENTATION-PLAN.md` is the best-format source
+  for the next detailed phased development plan. Its task tables, gates,
+  validation commands, dependency graphs, risk register, and recommended
+  execution order are worth reusing, but its scope must be reconciled with the
+  agreed decisions in this document.
+- `plan_docs-self-contained/Standalone Service Migration Plan -
+  workflow-orchestration-service.md` contains the earlier full six-phase
+  client/server migration plan, including server image work, client/sentinel
+  work, webhook handling, GitHub App integration, and hardening.
+- `plan_docs-self-contained/Application Implementation Specification -
+  workflow-orchestration-service v1.2.md` is a condensed implementation spec
+  derived from the standalone service migration plan.
 - `.archived/runtime-migration/server-system-service-plan.md` captured the
   Compose-managed service direction, script compatibility requirement, and
   separation of local/LAN runtime from GitHub Actions reachability.
