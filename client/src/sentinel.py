@@ -10,6 +10,7 @@ Adapted from plan_docs/orchestrator_sentinel.py for the standalone
 client/server architecture.
 """
 
+import argparse
 import asyncio
 import os
 import signal
@@ -100,7 +101,7 @@ async def run_shell_command(
 
         return subprocess.CompletedProcess(
             args=args,
-            returncode=process.returncode,
+            returncode=process.returncode if process.returncode is not None else 1,
             stdout=stdout.decode().strip() if stdout else "",
             stderr=stderr.decode().strip() if stderr else "",
         )
@@ -118,21 +119,31 @@ class Sentinel:
         self._current_backoff = POLL_INTERVAL
 
     async def _check_server_health(self) -> bool:
-        """Verify the orchestration server is reachable before dispatching."""
+        """Verify the orchestration server is reachable before dispatching.
+
+        Health probe: GET <OPENCODE_SERVER_URL>/ — any 2xx response is healthy.
+        On non-2xx or network error, returns False so the caller can skip dispatch.
+        """
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
                 resp = await client.get(f"{OPENCODE_SERVER_URL}/")
-                return resp.status_code == 200
+                return 200 <= resp.status_code < 300
         except Exception as exc:
             logger.warning(f"Server health check failed: {exc}")
             return False
 
     async def _heartbeat_loop(self, item: WorkItem, start_time: float):
-        """Post periodic heartbeat comments while a task is running."""
+        """Post periodic heartbeat comments while a task is running.
+
+        Each comment includes OPENCODE_SERVER_URL so observers can see which
+        server is handling the dispatch (D3 requirement).
+        """
         while True:
             await asyncio.sleep(HEARTBEAT_INTERVAL)
             elapsed = int(asyncio.get_event_loop().time() - start_time)
-            await self.queue.post_heartbeat(item, SENTINEL_ID, elapsed)
+            await self.queue.post_heartbeat(
+                item, SENTINEL_ID, elapsed, server_url=OPENCODE_SERVER_URL
+            )
 
     async def process_task(self, item: WorkItem):
         logger.info(f"Processing Task #{item.issue_number}...")
@@ -170,7 +181,7 @@ class Sentinel:
                     "-u",
                     OPENCODE_SERVER_URL,
                     "-d",
-                    OPENCODE_SERVER_DIR,
+                    OPENCODE_SERVER_DIR or "",
                 ],
                 timeout=SUBPROCESS_TIMEOUT,
             )
@@ -208,7 +219,13 @@ class Sentinel:
             except asyncio.CancelledError:
                 pass
 
-    async def run_forever(self):
+    async def run_forever(self, once: bool = False):
+        """Run the polling loop continuously or for a single pass.
+
+        Args:
+            once: When True, exit after one polling pass (useful for testing
+                  and smoke checks via the ``--once`` CLI flag).
+        """
         logger.info(
             f"Sentinel {SENTINEL_ID} entering polling loop "
             f"(interval: {POLL_INTERVAL}s, server: {OPENCODE_SERVER_URL})"
@@ -246,6 +263,10 @@ class Sentinel:
             except Exception as e:
                 logger.error(f"Polling cycle error: {str(e)}")
 
+            if once:
+                logger.info("--once flag set — exiting after one polling pass")
+                break
+
             await asyncio.sleep(self._current_backoff)
 
         logger.info("Shutdown flag set — exiting polling loop")
@@ -254,7 +275,7 @@ class Sentinel:
 # --- Entry Point ---
 
 
-async def _main():
+async def _main(once: bool = False) -> None:
     required = {"GITHUB_TOKEN": GITHUB_TOKEN, "GITHUB_ORG": GITHUB_ORG, "GITHUB_REPO": GITHUB_REPO}
     missing = [k for k, v in required.items() if not v]
     if missing:
@@ -269,18 +290,28 @@ async def _main():
             "Set it to the GitHub login of the bot account for concurrency safety (R-2)."
         )
 
-    gh_queue = GitHubQueue(GITHUB_TOKEN, GITHUB_ORG, GITHUB_REPO)
+    # At this point missing-var check above has already called sys.exit if any are None.
+    gh_queue = GitHubQueue(GITHUB_TOKEN or "", GITHUB_ORG or "", GITHUB_REPO or "")
     sentinel = Sentinel(gh_queue)
 
     try:
-        await sentinel.run_forever()
+        await sentinel.run_forever(once=once)
     finally:
         await gh_queue.close()
         logger.info("Sentinel shut down.")
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="OS-APOW Sentinel Orchestrator")
+    parser.add_argument(
+        "--once",
+        action="store_true",
+        default=False,
+        help="Exit after one polling pass (for smoke tests and CI dry-runs).",
+    )
+    args = parser.parse_args()
+
     try:
-        asyncio.run(_main())
+        asyncio.run(_main(once=args.once))
     except KeyboardInterrupt:
         logger.info("Sentinel shutting down gracefully.")

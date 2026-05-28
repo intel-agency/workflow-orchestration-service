@@ -233,14 +233,30 @@ class GitHubQueue(ITaskQueue):
         logger.info(f"Successfully claimed Task #{item.issue_number}")
         return True
 
-    async def post_heartbeat(self, item: WorkItem, sentinel_id: str, elapsed_secs: int):
-        """Post a heartbeat comment to keep observers informed."""
+    async def post_heartbeat(
+        self,
+        item: WorkItem,
+        sentinel_id: str,
+        elapsed_secs: int,
+        server_url: str = "",
+    ):
+        """Post a heartbeat comment to keep observers informed.
+
+        Args:
+            item: The work item being processed.
+            sentinel_id: Unique identifier for the sentinel instance.
+            elapsed_secs: Seconds elapsed since task start.
+            server_url: OPENCODE_SERVER_URL for the dispatch server; included in
+                the comment so observers know which server is handling the work (D3).
+        """
         base = self._repo_api_url(item.target_repo_slug)
         comment_url = f"{base}/issues/{item.issue_number}/comments"
         minutes = elapsed_secs // 60
+        server_line = f"\n- **Server:** `{server_url}`" if server_url else ""
         msg = (
             f"💓 **Heartbeat** — Sentinel {sentinel_id} still working.\n"
-            f"- **Elapsed:** {minutes}m\n"
+            f"- **Elapsed:** {minutes}m"
+            f"{server_line}\n"
             f"- **Timestamp:** {datetime.now(timezone.utc).isoformat()}"
         )
         try:
