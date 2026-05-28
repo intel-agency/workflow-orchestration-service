@@ -426,5 +426,8 @@ docker/.env
 models.json
 test-results-pester.xml
 
+# Local environment file (contains real secrets — never commit)
+.env
+
 # MCP memory knowledge graph (cached via GH Actions, not committed)
 .memory/
