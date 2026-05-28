@@ -1,11 +1,11 @@
 """
-OS-APOW Unified Work Item Model
+workflow-orchestration-service Unified Work Item Model
 
 Canonical data model shared by both the Sentinel Orchestrator and the
 Work Event Notifier. Both components import from this module to prevent
 model divergence.
 
-See: OS-APOW Plan Review, I-1 / R-3
+See: workflow-orchestration-service Plan Review, I-1 / R-3
 """
 
 import re
@@ -34,10 +34,11 @@ class WorkItemStatus(str, Enum):
 
 
 class WorkItem(BaseModel):
-    """Unified work item used across all OS-APOW components.
+    """Unified work item used across all workflow-orchestration-service components.
 
-    All fields are required. Both the Notifier and Sentinel construct
-    WorkItems with all fields populated from their respective data sources.
+    Fields populated by the Notifier are marked Optional so the Sentinel
+    can construct WorkItems from its own polling results without requiring
+    the raw webhook payload.
     """
 
     id: str
@@ -51,22 +52,23 @@ class WorkItem(BaseModel):
 
 
 # --- Credential Scrubber (R-7) ---
+# Regex patterns that match common secret formats. Used to sanitize
+# worker output before posting to GitHub issue comments.
+
 _SECRET_PATTERNS = [
-    re.compile(r"ghp_[A-Za-z0-9_]{36,}"),
-    re.compile(r"ghs_[A-Za-z0-9_]{36,}"),
-    re.compile(r"gho_[A-Za-z0-9_]{36,}"),
-    re.compile(r"github_pat_[A-Za-z0-9_]{22,}"),
+    re.compile(r"ghp_[A-Za-z0-9_]{36,}"),  # GitHub PAT (classic)
+    re.compile(r"ghs_[A-Za-z0-9_]{36,}"),  # GitHub App installation token
+    re.compile(r"gho_[A-Za-z0-9_]{36,}"),  # GitHub OAuth token
+    re.compile(r"github_pat_[A-Za-z0-9_]{22,}"),  # GitHub fine-grained PAT
     re.compile(r"Bearer\s+[A-Za-z0-9\-._~+/]+=*", re.IGNORECASE),
     re.compile(r"token\s+[A-Za-z0-9\-._~+/]{20,}", re.IGNORECASE),
-    re.compile(r"sk-[A-Za-z0-9]{20,}"),
-    re.compile(r"[A-Za-z0-9]{32,}\.zhipu[A-Za-z0-9]*"),
+    re.compile(r"sk-[A-Za-z0-9]{20,}"),  # OpenAI-style API keys
+    re.compile(r"[A-Za-z0-9]{32,}\.zhipu[A-Za-z0-9]*"),  # ZhipuAI keys
 ]
 
 
 def scrub_secrets(text: str, replacement: str = "***REDACTED***") -> str:
     """Strip known secret patterns from text for safe public posting."""
-    if not text:
-        return ""
     for pattern in _SECRET_PATTERNS:
         text = pattern.sub(replacement, text)
     return text
