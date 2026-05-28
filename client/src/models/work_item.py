@@ -74,17 +74,4 @@ def scrub_secrets(text: str, replacement: str = "***REDACTED***") -> str:
     return text
 
 
-def classify_task_type(issue: dict) -> TaskType:
-    """Determine the TaskType from issue title and labels.
 
-    Centralized logic used by both the Notifier and the Sentinel
-    to ensure consistent classification.
-    """
-    labels = [label["name"] for label in issue.get("labels", [])]
-    title = issue.get("title", "")
-
-    if "[Application Plan]" in title or "[Plan]" in title or "agent:plan" in labels:
-        return TaskType.PLAN
-    elif "bug" in labels:
-        return TaskType.BUGFIX
-    return TaskType.IMPLEMENT

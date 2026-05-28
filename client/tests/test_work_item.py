@@ -8,7 +8,6 @@ Covers:
 - scrub_secrets parametrized synthetic patterns (VAL-CLI-023)
 - Pydantic model validation (required fields, type coercion)
 - WorkItem serialization round-trip (JSON / dict)
-- classify_task_type business logic
 """
 
 import json
@@ -19,7 +18,6 @@ from src.models.work_item import (
     TaskType,
     WorkItem,
     WorkItemStatus,
-    classify_task_type,
     scrub_secrets,
 )
 
@@ -343,43 +341,4 @@ class TestScrubSecrets:
         assert "***REDACTED***" in result
 
 
-# ---------------------------------------------------------------------------
-# classify_task_type — business logic
-# ---------------------------------------------------------------------------
 
-
-class TestClassifyTaskType:
-    def _make_issue(self, title: str = "Fix something", labels: list = None) -> dict:
-        labels = labels or []
-        return {
-            "title": title,
-            "labels": [{"name": lbl} for lbl in labels],
-        }
-
-    def test_default_is_implement(self):
-        issue = self._make_issue()
-        assert classify_task_type(issue) == TaskType.IMPLEMENT
-
-    def test_plan_label(self):
-        issue = self._make_issue(labels=["agent:plan"])
-        assert classify_task_type(issue) == TaskType.PLAN
-
-    def test_plan_title_bracket(self):
-        issue = self._make_issue(title="[Plan] New architecture")
-        assert classify_task_type(issue) == TaskType.PLAN
-
-    def test_application_plan_title(self):
-        issue = self._make_issue(title="[Application Plan] Redesign auth")
-        assert classify_task_type(issue) == TaskType.PLAN
-
-    def test_bug_label(self):
-        issue = self._make_issue(labels=["bug"])
-        assert classify_task_type(issue) == TaskType.BUGFIX
-
-    def test_empty_issue_defaults_to_implement(self):
-        assert classify_task_type({}) == TaskType.IMPLEMENT
-
-    def test_plan_takes_priority_over_bug(self):
-        """Plan label/title takes priority over bug label."""
-        issue = self._make_issue(title="[Plan] Also a bug", labels=["bug", "agent:plan"])
-        assert classify_task_type(issue) == TaskType.PLAN
