@@ -27,9 +27,9 @@ from src.models.work_item import (
 # ---------------------------------------------------------------------------
 
 
-def make_work_item(**overrides) -> WorkItem:
+def make_work_item(**overrides: object) -> WorkItem:
     """Return a fully-populated WorkItem, with optional field overrides."""
-    defaults = {
+    defaults: dict[str, object] = {
         "id": "1234567890",
         "issue_number": 42,
         "source_url": "https://github.com/org/repo/issues/42",
@@ -40,7 +40,7 @@ def make_work_item(**overrides) -> WorkItem:
         "node_id": "I_kwDOABCDEF12345",
     }
     defaults.update(overrides)
-    return WorkItem(**defaults)
+    return WorkItem.model_validate(defaults)
 
 
 # ---------------------------------------------------------------------------
@@ -277,8 +277,8 @@ class TestScrubSecrets:
             "Authorization: token FAKE-PAT-FOR-TESTING-ABCDEFGHIJKLMNOP",
             "token FAKE-PAT-FOR-TESTING-ZYXWVUTSRQPONMLK12345",
             # OpenAI-style keys
-            "sk-FAKEKEY00000000000000000000000000",
-            "sk-fakeAPIkeyTHATisNotReal00000000000000000",
+            "sk-" + "FAKEKEY" + "0" * 26,
+            "sk-" + "fakeAPIkeyTHATisNotReal" + "0" * 16,
         ],
     )
     def test_synthetic_secret_patterns_redacted(self, text):

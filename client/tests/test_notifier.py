@@ -24,6 +24,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from fastapi import FastAPI
+from fastapi.routing import APIRoute
 from fastapi.testclient import TestClient
 
 # ---------------------------------------------------------------------------
@@ -92,7 +93,7 @@ def test_app_exposes_required_routes() -> None:
     """The FastAPI app must expose POST /webhooks/github and GET /health (VAL-CLI-031)."""
     import src.notifier as notifier_mod  # noqa: PLC0415
 
-    paths = {r.path for r in notifier_mod.app.routes}
+    paths = {r.path for r in notifier_mod.app.routes if isinstance(r, APIRoute)}
     assert "/webhooks/github" in paths, f"Missing /webhooks/github; got {paths}"
     assert "/health" in paths, f"Missing /health; got {paths}"
 
