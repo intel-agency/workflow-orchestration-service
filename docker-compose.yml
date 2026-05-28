@@ -9,11 +9,12 @@
 
 services:
   orchestration-server:
+    image: workflow-orchestration-service:latest
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4096:4096"
+      - "14096:4096"
     environment:
       - ZHIPU_API_KEY
       - KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY
@@ -35,11 +36,12 @@ services:
       start_period: 30s
 
   orchestration-client:
+    image: workflow-orchestration-client:latest
     build:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "18000:8000"
     environment:
       - OPENCODE_SERVER_URL=http://orchestration-server:4096
       - GITHUB_TOKEN
