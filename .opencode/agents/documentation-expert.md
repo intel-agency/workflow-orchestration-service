@@ -1,7 +1,7 @@
 ---
 description: Writes developer and user docs, quickstarts, and runbooks
 mode: subagent
-model: zai-coding-plan/glm-5
+model: zai-coding-plan/glm-4.7
 temperature: 0.3
 tools:
   read: true

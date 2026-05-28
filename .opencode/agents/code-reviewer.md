@@ -1,7 +1,7 @@
 ---
 description: Provides rigorous code reviews covering correctness, security, performance, and documentation
 mode: subagent
-model: zai-coding-plan/glm-5
+model: zai-coding-plan/glm-4.7
 temperature: 0.1
 tools:
   read: true

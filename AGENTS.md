@@ -54,7 +54,7 @@ scope: repository
   </template_usage>
 
   <tech_stack>
-    <item>opencode CLI — agent runtime (`opencode --model zai-coding-plan/glm-5 --agent orchestrator`)</item>
+    <item>opencode CLI — agent runtime (`opencode --model zai-coding-plan/glm-4.7 --agent orchestrator`)</item>
     <item>ZhipuAI GLM models (`glm-5`, `glm-4.7`, `glm-4.7-flash`, `glm-4.7-flashx`) via `ZHIPU_API_KEY`</item>
     <item>Kimi (Moonshot) models (`kimi-k2-thinking`, `k2p5`) via `KIMI_CODE_ORCHESTRATOR_AGENT_API_KEY`</item>
     <item>OpenAI models (`gpt-5.4`, `gpt-5.4-mini`, `gpt-5.4-nano`, `gpt-5.3-codex`) via `OPENAI_API_KEY`</item>
@@ -81,7 +81,7 @@ scope: repository
     <entry><path>scripts/start-opencode-server.sh</path><description>Guarded `opencode serve` bootstrapper used by the devcontainer lifecycle and workflow attach path. Uses `setsid` to survive devcontainer exec session teardown.</description></entry>
     <entry><path>scripts/devcontainer-opencode.sh</path><description>Primary CLI wrapper for devcontainer-based orchestration. Supports subcommands for one-shot prompt execution and server attach mode. Used by the `orchestrator-agent` workflow.</description></entry>
     <entry><path>scripts/assemble-orchestrator-prompt.sh</path><description>Assembles the orchestrator prompt from the template, event context, and event JSON. Writes to `.assembled-orchestrator-prompt.md`.</description></entry>
-    <entry><path>run_opencode_prompt.sh</path><description>Root-level script — validates API keys, exports `GH_TOKEN`/`GITHUB_TOKEN`/`GITHUB_PERSONAL_ACCESS_TOKEN` from `GH_ORCHESTRATION_AGENT_TOKEN`, and invokes `opencode run --model zai-coding-plan/glm-5 --agent orchestrator` in server attach mode.</description></entry>
+    <entry><path>run_opencode_prompt.sh</path><description>Root-level script — validates API keys, exports `GH_TOKEN`/`GITHUB_TOKEN`/`GITHUB_PERSONAL_ACCESS_TOKEN` from `GH_ORCHESTRATION_AGENT_TOKEN`, and invokes `opencode run --model zai-coding-plan/glm-4.7 --agent orchestrator` in server attach mode.</description></entry>
     <!-- Tests -->
     <entry><path>test/</path><description>Test suite — shell scripts (`bash`) and Pester (`pwsh`) tests: devcontainer tool availability, prompt assembly, image tag logic, opencode run/server, watchdog IO detection, and workflow/agent validation.</description></entry>
     <entry><path>test/fixtures/</path><description>Sample webhook payloads for local testing (issues-opened, pr-opened, pr-review-submitted, etc.) and prompt fixtures.</description></entry>

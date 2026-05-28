@@ -1,7 +1,7 @@
 ---
 description: Generalist engineer delivering small, cross-cutting enhancements with quality safeguards
 mode: all
-model: zai-coding-plan/glm-5
+model: zai-coding-plan/glm-4.7
 temperature: 0.3
 tools:
   read: true

@@ -5,7 +5,7 @@ description: >-
   agents—breaking projects into subtasks and assigning them appropriately. This
   agent never writes code itself.
 mode: all
-model: zai-coding-plan/glm-5
+model: zai-coding-plan/glm-4.7
 temperature: 0.2
 tools:
   read: true

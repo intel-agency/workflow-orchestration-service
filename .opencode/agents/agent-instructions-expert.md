@@ -1,7 +1,7 @@
 ---
 description: Retrieves and inserts guidance from the canonical agent-instructions repository; returns minimal focused responses to orchestrating agents
 mode: subagent
-model: zai-coding-plan/glm-5
+model: zai-coding-plan/glm-4.7
 temperature: 0.2
 tools:
   read: true

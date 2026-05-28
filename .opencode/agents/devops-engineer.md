@@ -1,7 +1,7 @@
 ---
 description: Designs and maintains CI/CD pipelines, environments, and automation with observability and security
 mode: all
-model: zai-coding-plan/glm-5
+model: zai-coding-plan/glm-4.7
 temperature: 0.3
 tools:
   read: true

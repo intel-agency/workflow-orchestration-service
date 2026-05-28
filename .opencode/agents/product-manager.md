@@ -1,7 +1,7 @@
 ---
 description: Outcome-oriented strategist; captures customer value and aligns delivery plans
 mode: all
-model: zai-coding-plan/glm-5
+model: zai-coding-plan/glm-4.7
 temperature: 0.2
 tools:
   read: true
