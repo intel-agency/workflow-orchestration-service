@@ -1,0 +1,26 @@
+# Build context for the orchestration server Dockerfile.
+# Only include files needed for the server image.
+.git
+.devcontainer
+.factory
+.mission-readiness
+.qwen
+client
+docs
+local_ai_instruction_modules
+node_modules
+plan_docs
+plan_docs-self-contained
+test
+__pycache__
+*.pyc
+*.pyo
+.env
+.env.*
+!.env.example
+*.code-workspace
+*.code-profile
+docker-compose.yml
+test-results-pester.xml
+LICENSE
+global.json
