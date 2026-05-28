@@ -55,7 +55,7 @@ if ($attachUrl -and $user -and $pass)
 
 $opencodeArgs = @(
     "run",
-    "--model", "zai-coding-plan/glm-5",
+    "--model", "zai-coding-plan/glm-4.7",
     "--agent", "orchestrator",
     "--log-level", $LogLevel
 )

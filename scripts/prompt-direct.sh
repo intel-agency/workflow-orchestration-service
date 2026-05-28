@@ -16,7 +16,7 @@ set -euo pipefail
 
 DEVCONTAINER_CONFIG="${DEVCONTAINER_CONFIG:-.devcontainer/devcontainer.json}"
 WORKSPACE_FOLDER="${WORKSPACE_FOLDER:-.}"
-MODEL="${OPENCODE_MODEL:-zai-coding-plan/glm-5}"
+MODEL="${OPENCODE_MODEL:-zai-coding-plan/glm-4.7}"
 AGENT="${OPENCODE_AGENT:-orchestrator}"
 LOG_LEVEL="${OPENCODE_LOG_LEVEL:-INFO}"
 
@@ -29,7 +29,7 @@ Usage: prompt-direct.sh -p <prompt> | -f <file> [options]
 
   -p <prompt>     Inline prompt string
   -f <file>       Path to prompt file (read from host, passed as string)
-  -m <model>      Model (default: zai-coding-plan/glm-5, env: OPENCODE_MODEL)
+  -m <model>      Model (default: zai-coding-plan/glm-4.7, env: OPENCODE_MODEL)
   -a <agent>      Agent (default: orchestrator, env: OPENCODE_AGENT)
   -l <level>      Log level: DEBUG|INFO|WARN|ERROR (default: INFO)
   -c <config>     devcontainer.json path (default: .devcontainer/devcontainer.json)

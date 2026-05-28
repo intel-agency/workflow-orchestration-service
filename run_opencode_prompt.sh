@@ -128,7 +128,7 @@ fi
 # Build opencode args — optional flags only included when set
 opencode_args=(
     run
-    --model zai-coding-plan/glm-5
+    --model zai-coding-plan/glm-4.7
     --agent orchestrator
     --log-level "$log_level"
     --thinking
