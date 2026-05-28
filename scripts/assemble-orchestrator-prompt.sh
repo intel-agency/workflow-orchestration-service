@@ -17,14 +17,39 @@
 #   $5  ref
 #   $6  sha
 #
+# Optional environment variables:
+#   ORCHESTRATION_ROOT   Root directory of the orchestration installation. Inside the server
+#                        image the entrypoint exports this to ${ORCHESTRATION_ROOT:-/opt/orchestration}.
+#                        Override on the host to point at a local checkout. The prompt template is
+#                        resolved as ${ORCHESTRATION_ROOT}/prompts/orchestrator-agent-prompt.md
+#                        when that file exists, falling back to the GitHub Actions path
+#                        (.github/workflows/prompts/orchestrator-agent-prompt.md) otherwise.
+#   GITHUB_ENV           Path to the GitHub Actions environment file for output variable export.
+#                        Defaults to /dev/null when not running under GitHub Actions so this
+#                        script can be invoked standalone for local testing.
+#
 # Outputs:
 #   .assembled-orchestrator-prompt.md   — the assembled prompt file
 #   ORCHESTRATOR_PROMPT_PATH            — written to $GITHUB_ENV
 
 set -euo pipefail
 
+# ORCHESTRATION_ROOT resolves paths inside the orchestration installation.
+# Defaults to the container image path; override on the host for local runs.
+ORCHESTRATION_ROOT="${ORCHESTRATION_ROOT:-/opt/orchestration}"
+
+# Allow standalone (non-Actions) invocations by defaulting GITHUB_ENV to /dev/null.
+GITHUB_ENV="${GITHUB_ENV:-/dev/null}"
+
 ASSEMBLED_PROMPT=".assembled-orchestrator-prompt.md"
-PROMPT_TEMPLATE=".github/workflows/prompts/orchestrator-agent-prompt.md"
+# Template lives at different paths depending on the runtime environment:
+#   - Server container: ${ORCHESTRATION_ROOT}/prompts/orchestrator-agent-prompt.md
+#   - GitHub Actions (host): .github/workflows/prompts/orchestrator-agent-prompt.md
+if [[ -f "${ORCHESTRATION_ROOT}/prompts/orchestrator-agent-prompt.md" ]]; then
+    PROMPT_TEMPLATE="${ORCHESTRATION_ROOT}/prompts/orchestrator-agent-prompt.md"
+else
+    PROMPT_TEMPLATE=".github/workflows/prompts/orchestrator-agent-prompt.md"
+fi
 
 EVENT_NAME="${1:-}"
 EVENT_ACTION="${2:-}"
@@ -90,7 +115,7 @@ echo "  Match Clauses:     $(grep -c '## Match Clause Cases'      "$ASSEMBLED_PR
 echo "  Helper Functions:  $(grep -c '## Helper Functions'        "$ASSEMBLED_PROMPT" || echo 0)"
 echo "  Final section:     $(grep -c '## Final'                   "$ASSEMBLED_PROMPT" || echo 0)"
 echo "  Event Name line:   $(grep -c 'Event Name:'               "$ASSEMBLED_PROMPT" || echo 0)"
-printf '  JSON code block:   %s\n' "$(grep -c '^\`\`\`json' "$ASSEMBLED_PROMPT" || echo 0)"
+printf '  JSON code block:   %s\n' "$(grep -c "^\`\`\`json" "$ASSEMBLED_PROMPT" || echo 0)"
 echo "  Injection leftover:$(grep -c '{{__EVENT_DATA__}}'        "$ASSEMBLED_PROMPT" || echo 0)"
 echo "::endgroup::"
 

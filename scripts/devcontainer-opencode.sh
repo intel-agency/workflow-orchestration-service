@@ -21,7 +21,18 @@ set -euo pipefail
 #   -f <file>     assembled prompt file path (required, or use -p)
 #   -p <prompt>   inline prompt string       (required, or use -f)
 #   -u <url>      opencode server URL        (env: OPENCODE_SERVER_URL, default: http://127.0.0.1:4096)
-#   -d <dir>      server-side working dir    (env: OPENCODE_SERVER_DIR, default: /workspaces/<repo-name>)
+#   -d <dir>      server-side working dir    (env: OPENCODE_SERVER_DIR, default: ${ORCHESTRATION_ROOT:-/opt/orchestration})
+#
+# Environment variables:
+#   ORCHESTRATION_ROOT   Root directory of the orchestration installation. Inside the server
+#                        image the entrypoint exports this to ${ORCHESTRATION_ROOT:-/opt/orchestration}.
+#                        Override on the host to point at a local checkout; the default for the
+#                        server-side working directory (-d) is derived from this value so the
+#                        script works both inside the container and on the host.
+
+# ORCHESTRATION_ROOT resolves paths inside the orchestration installation.
+# Defaults to the container image path; override on the host for local runs.
+ORCHESTRATION_ROOT="${ORCHESTRATION_ROOT:-/opt/orchestration}"
 
 DEVCONTAINER_CONFIG="${DEVCONTAINER_CONFIG:-.devcontainer/devcontainer.json}"
 WORKSPACE_FOLDER="${WORKSPACE_FOLDER:-.}"
@@ -122,9 +133,12 @@ case "$COMMAND" in
         else
             prompt_arg=(-f "$PROMPT_FILE")
         fi
-        # Derive default server-side dir from the workspace folder basename
+        # Derive default server-side dir.
+        # Inside the server image, ORCHESTRATION_ROOT is exported by the entrypoint so
+        # the shell bridge automatically targets the correct installation path.
+        # On the host (devcontainer-based runs), fall back to the workspace path.
         if [[ -z "$OPENCODE_SERVER_DIR" ]]; then
-            OPENCODE_SERVER_DIR="/workspaces/$(basename "$(cd "$WORKSPACE_FOLDER" && pwd)")"
+            OPENCODE_SERVER_DIR="${ORCHESTRATION_ROOT:-/opt/orchestration}"
         fi
         devcontainer exec "${shared_args[@]}" \
             --remote-env ZHIPU_API_KEY="$ZHIPU_API_KEY" \
