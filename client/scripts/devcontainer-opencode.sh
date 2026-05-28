@@ -1,0 +1,1 @@
+../../scripts/devcontainer-opencode.sh
