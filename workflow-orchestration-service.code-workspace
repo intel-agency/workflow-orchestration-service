@@ -15,6 +15,7 @@
 		],
 		"python.analysis.typeCheckingMode": "off",
 		"markdown.validate.enabled": true,
-		"powershell.cwd": "workflow-orchestration-service"
+		"powershell.cwd": "workflow-orchestration-service",
+		"python.languageServer": "None"
 	}
 }
