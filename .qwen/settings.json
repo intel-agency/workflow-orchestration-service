@@ -9,13 +9,18 @@
     "sequential-thinking": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
       "version": "0.0.1"
     },
     "memory": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["mcp-memory-service"],
+      "args": [
+        "mcp-memory-service"
+      ],
       "version": "0.0.1"
     },
     "microsoft-docs": {
@@ -29,7 +34,16 @@
   "ui": {
     "theme": "Default"
   },
-  "disabledTools": ["web_fetch"],
+  "disabledTools": [
+    "web_fetch"
+  ],
   "inputs": [],
-  "$version": 3
+  "$version": 4,
+  "permissions": {
+    "allow": [
+      "Bash(bash *)",
+      "Bash(git add *)",
+      "Bash(pwsh *)"
+    ]
+  }
 }
